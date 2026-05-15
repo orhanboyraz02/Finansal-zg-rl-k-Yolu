@@ -2,444 +2,652 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anadolu Network | Liderlik & Yönetim Platformu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>90 Günlük FIRE Kontrol Paneli | Anadolu Network</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: linear-gradient(135deg, #0a0f1a 0%, #0a1a3a 100%);
-            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
             color: #e2e8f0;
+            padding: 20px;
         }
-        .login-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
+        .container { max-width: 1600px; margin: 0 auto; }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 30px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        .header h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #d4af37, #f5e6a3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header p { color: #94a3b8; margin-top: 8px; }
+        
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        .kpi-card {
+            background: rgba(15, 42, 74, 0.7);
+            backdrop-filter: blur(5px);
+            border-radius: 20px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            transition: 0.2s;
+        }
+        .kpi-card:hover { border-color: #d4af37; transform: translateY(-3px); }
+        .kpi-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; }
+        .kpi-value { font-size: 1.6rem; font-weight: bold; color: #d4af37; margin: 8px 0; }
+        .kpi-trend { font-size: 0.7rem; color: #4ade80; }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: rgba(15, 42, 74, 0.7);
+            backdrop-filter: blur(5px);
+            border-radius: 24px;
+            padding: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .card h3 {
+            color: #d4af37;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            z-index: 2000;
+            gap: 8px;
+            border-left: 3px solid #d4af37;
+            padding-left: 12px;
         }
-        .login-box {
-            background: #0f2a4a;
-            padding: 40px;
-            border-radius: 24px;
-            width: 350px;
-            text-align: center;
-            border: 2px solid #d4af37;
-        }
-        .login-box h2 { color: #d4af37; margin-bottom: 20px; }
-        .login-box input {
-            width: 100%;
-            padding: 12px;
+        .progress-bar {
+            background: #2d3748;
+            border-radius: 10px;
+            height: 10px;
+            overflow: hidden;
             margin: 10px 0;
-            background: #07152e;
-            border: 1px solid #2a456b;
-            border-radius: 12px;
-            color: #d4af37;
         }
-        .login-box button {
-            width: 100%;
-            padding: 12px;
+        .progress-fill {
+            background: linear-gradient(90deg, #d4af37, #f5e6a3);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+        
+        table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+        th, td { border: 1px solid #334155; padding: 8px; text-align: left; }
+        th { background: #1e293b; color: #d4af37; }
+        
+        button {
             background: #d4af37;
             color: #0a1a3a;
             font-weight: bold;
             border: none;
             border-radius: 30px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        .dashboard { display: none; }
-        .sidebar {
-            width: 260px;
-            background: #0f2a4a;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            border-right: 1px solid #d4af37;
-        }
-        .sidebar-header { padding: 20px; text-align: center; border-bottom: 1px solid #d4af37; }
-        .sidebar-header h2 { color: #d4af37; }
-        .nav-item {
-            padding: 12px 20px;
-            margin: 5px 10px;
-            border-radius: 12px;
-            cursor: pointer;
-            color: #cbd5e1;
-        }
-        .nav-item:hover, .nav-item.active { background: #d4af37; color: #0a1a3a; }
-        .main-content {
-            margin-left: 260px;
-            padding: 20px;
-            min-height: 100vh;
-        }
-        .card {
-            background: rgba(15,42,74,0.7);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(212,175,55,0.3);
-        }
-        .card h3 { color: #d4af37; margin-bottom: 15px; }
-        input, select {
-            background: #07152e;
-            border: 1px solid #2a456b;
-            border-radius: 10px;
-            padding: 8px 12px;
-            width: 100%;
-            margin: 5px 0;
-            color: #d4af37;
-        }
-        button {
-            background: #d4af37;
-            color: #0a1a3a;
-            border: none;
-            border-radius: 25px;
             padding: 8px 16px;
             cursor: pointer;
-            font-weight: bold;
+            transition: 0.2s;
+            font-size: 0.75rem;
         }
-        .analysis-box {
-            background: #07152e;
-            border-left: 3px solid #d4af37;
-            border-radius: 10px;
+        button:hover { background: #b8962e; transform: scale(1.02); }
+        .btn-secondary { background: #2d3748; color: #d4af37; }
+        
+        input, select {
+            background: rgba(7, 21, 46, 0.9);
+            border: 1px solid #2a456b;
+            border-radius: 12px;
+            padding: 6px 10px;
+            width: 100%;
+            margin: 4px 0;
+            color: #d4af37;
+            font-size: 0.8rem;
+        }
+        
+        .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .badge { padding: 4px 12px; border-radius: 30px; font-size: 0.7rem; }
+        .badge-conservative { background: #3b82f6; color: white; }
+        .badge-base { background: #10b981; color: white; }
+        .badge-aggressive { background: #ef4444; color: white; }
+        
+        .phase-card {
+            background: rgba(7, 21, 46, 0.6);
+            border-radius: 16px;
             padding: 12px;
             margin-top: 12px;
-            font-size: 0.85rem;
         }
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+        
+        .analysis-box {
+            background: rgba(7, 21, 46, 0.6);
+            border-left: 3px solid #d4af37;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 12px;
+            font-size: 0.8rem;
+            white-space: pre-line;
         }
-        .logout-btn {
-            background: #dc2626;
+        
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            font-size: 0.7rem;
+            color: #94a3b8;
+        }
+        footer a { color: #d4af37; text-decoration: none; }
+        
+        .whatsapp-btn {
+            background: #25D366;
             color: white;
             padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            display: inline-block;
-        }
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 260px;
-            right: 0;
-            background: #0f2a4a;
-            border-top: 1px solid #d4af37;
-            padding: 8px;
-            text-align: center;
+            border-radius: 30px;
+            text-decoration: none;
             font-size: 0.7rem;
-            z-index: 100;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
-        .hidden { display: none; }
-        .flex-between { display: flex; justify-content: space-between; align-items: center; }
-        .badge { padding: 2px 8px; border-radius: 20px; background: #d4af37; color: #0a1a3a; font-size: 0.7rem; }
+        
         @media (max-width: 768px) {
-            .sidebar { transform: translateX(-100%); }
-            .main-content { margin-left: 0; }
-            footer { left: 0; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            body { padding: 10px; }
         }
     </style>
 </head>
 <body>
+<div class="container">
+    <div class="header">
+        <h1>🔥 90 Günlük FIRE Kontrol Paneli</h1>
+        <p>Finansal Bağımsızlık • Erken Emeklilik • Sistematik Özgürlük Planı</p>
+        <div style="margin-top: 15px;">
+            <span class="badge badge-conservative">Conservative</span>
+            <span class="badge badge-base">Base Case</span>
+            <span class="badge badge-aggressive">Aggressive</span>
+            <button onclick="runScenario('conservative')" style="margin-left: 10px;">📊 Conservative</button>
+            <button onclick="runScenario('base')">📈 Base Case</button>
+            <button onclick="runScenario('aggressive')">🚀 Aggressive</button>
+            <a href="https://wa.me/905418660202" target="_blank" class="whatsapp-btn" style="margin-left: 10px;">📲 WhatsApp</a>
+        </div>
+    </div>
 
-<!-- LOGIN EKRANI -->
-<div id="loginScreen" class="login-container">
-    <div class="login-box">
-        <h2>🔥 ANADOLU NETWORK</h2>
-        <p style="margin-bottom: 20px;">Liderlik & Yönetim Platformu</p>
-        <input type="text" id="loginUser" placeholder="Kullanıcı Adı" value="admin">
-        <input type="password" id="loginPass" placeholder="Şifre" value="admin123">
-        <button onclick="doLogin()">Giriş Yap</button>
-        <button onclick="doRegister()" style="background:#2d3748; color:#d4af37;">Kayıt Ol</button>
-        <div id="loginMsg" style="color:#ef4444; margin-top: 10px; font-size:0.75rem;"></div>
-    </div>
-</div>
+    <!-- KPI PANELİ -->
+    <div class="kpi-grid" id="kpiGrid"></div>
 
-<!-- DASHBOARD -->
-<div id="dashboard" class="dashboard">
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h2>🔥 ANADOLU</h2>
-            <p>Liderlik & Yönetim</p>
+    <!-- 90 Gün İlerleme Çubuğu -->
+    <div class="card" style="margin-bottom: 20px;">
+        <h3>⏳ 90 Günlük FIRE İlerlemesi</h3>
+        <div class="flex-between"><span>Başlangıç: Bugün</span><span id="dayCounter">0 / 90 Gün</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="daysProgress" style="width: 0%;"></div></div>
+        <div class="flex-between" style="margin-top: 10px;">
+            <button onclick="markDay()">✅ Bugünkü Aksiyonu İşaretle</button>
+            <button onclick="resetProgress()" class="btn-secondary">🔄 Sıfırla</button>
         </div>
-        <div class="nav-item active" onclick="showPage('leadership')">🧭 Liderlik Danışmanlığı</div>
-        <div class="nav-item" onclick="showPage('management')">📊 Yönetim Danışmanlığı</div>
-        <div class="nav-item" onclick="showPage('financial')">💰 Finansal Yönetim</div>
-        <div class="nav-item" onclick="showPage('team')">👥 Ekip & Performans</div>
-        <div class="nav-item" onclick="showPage('admin')">🔐 Yönetim Paneli</div>
-        <div style="padding: 20px; border-top: 1px solid #d4af37; margin-top: 20px;">
-            <div class="flex-between">
-                <span id="userNameDisplay">Admin</span>
-                <span class="logout-btn" onclick="logout()">Çıkış</span>
+        <div id="dailyTask" class="phase-card" style="margin-top: 12px; font-size: 0.8rem;">📌 Bugünün finansal aksiyonu: Gelir/gider kaydet + 1 gelir artırma hareketi</div>
+    </div>
+
+    <!-- Ana Dashboard Grid -->
+    <div class="dashboard-grid">
+        <div class="card">
+            <h3>📈 Gelir Paneli</h3>
+            <div><label>Aylık Aktif Gelir (₺)</label><input type="number" id="activeIncome" value="45000" onchange="updateAll()"></div>
+            <div><label>Aylık Pasif Gelir (₺)</label><input type="number" id="passiveIncome" value="5000" onchange="updateAll()"></div>
+            <div><label>Ek Gelir / Freelance (₺)</label><input type="number" id="extraIncome" value="0" onchange="updateAll()"></div>
+            <div id="totalIncomeDisplay" class="analysis-box" style="margin-top: 10px;">Toplam Gelir: 50.000 ₺</div>
+        </div>
+
+        <div class="card">
+            <h3>💸 Gider Paneli</h3>
+            <div><label>Zorunlu Giderler (kira/fatura/gıda)</label><input type="number" id="fixedExpense" value="18000" onchange="updateAll()"></div>
+            <div><label>Yaşam Giderleri (ulaşım/giyim/dışarı)</label><input type="number" id="variableExpense" value="7000" onchange="updateAll()"></div>
+            <div><label>Gereksiz Harcamalar (kesilebilir)</label><input type="number" id="wasteExpense" value="4000" onchange="updateAll()"></div>
+            <div id="totalExpenseDisplay" class="analysis-box" style="margin-top: 10px;">Toplam Gider: 29.000 ₺</div>
+            <button onclick="optimizeExpenses()" style="margin-top: 8px;">✂️ Gider Optimizasyonu Öner</button>
+        </div>
+
+        <div class="card">
+            <h3>🏦 Net Varlık & Yatırım</h3>
+            <div><label>Mevcut Birikim (₺)</label><input type="number" id="savings" value="450000" onchange="updateAll()"></div>
+            <div><label>Yatırım Portföyü (₺)</label><input type="number" id="investments" value="300000" onchange="updateAll()"></div>
+            <div><label>Borç (₺)</label><input type="number" id="debt" value="80000" onchange="updateAll()"></div>
+            <div id="netWorthDisplay" class="analysis-box">Net Servet: 670.000 ₺</div>
+            <div id="fireGapDisplay" class="analysis-box">🎯 FIRE Gap: --</div>
+        </div>
+
+        <div class="card">
+            <h3>📊 Tasarruf & Yatırım Oranı</h3>
+            <div id="savingsRateDisplay" class="kpi-value" style="font-size: 1.5rem;">--%</div>
+            <div class="progress-bar"><div class="progress-fill" id="savingsRateBar" style="width: 0%;"></div></div>
+            <div><label>Aylık Yatırım Hedefi (₺)</label><input type="number" id="monthlyInvestmentTarget" value="15000" onchange="updateAll()"></div>
+            <div id="investmentCapacity" class="analysis-box">Yatırım Kapasitesi: -- ₺/ay</div>
+        </div>
+    </div>
+
+    <!-- MENTAL SAĞLIK VE LİDERLİK BÖLÜMÜ -->
+    <div class="dashboard-grid">
+        <div class="card">
+            <h3>🧠 Mental Sağlık & Performans</h3>
+            <div><label>Stres Seviyesi (1-10)</label><input type="range" id="mentalStress" min="1" max="10" value="5" oninput="updateMental()"><span id="stressVal">5</span> - 🔴 Yüksek stres finansal kararları olumsuz etkiler</div>
+            <div><label>Uyku Kalitesi (1-10)</label><input type="range" id="mentalSleep" min="1" max="10" value="6" oninput="updateMental()"><span id="sleepVal">6</span> - 💤 İyi uyku, net karar vermeyi sağlar</div>
+            <div><label>Motivasyon (1-10)</label><input type="range" id="mentalMotivation" min="1" max="10" value="7" oninput="updateMental()"><span id="motivationVal">7</span> - 🚀 Yüksek motivasyon = yüksek performans</div>
+            <div><label>Odaklanma Süresi (günlük saat)</label><input type="number" id="focusHours" value="4" onchange="updateMental()"> saat</div>
+            <button onclick="analyzeMental()">🧘 Mental Değerlendirme Yap</button>
+            <div id="mentalReport" class="analysis-box">Mental sağlık analizi için butona tıklayın.</div>
+        </div>
+
+        <div class="card">
+            <h3>🧭 Liderlik & Kişisel Gelişim</h3>
+            <div><label>Liderlik Seviyesi (1-10)</label><input type="range" id="leadLevel" min="1" max="10" value="6" oninput="updateLeadership()"><span id="leadVal">6</span></div>
+            <div><label>Karar Verme Becerisi (1-10)</label><input type="range" id="decisionSkill" min="1" max="10" value="6" oninput="updateLeadership()"><span id="decisionVal">6</span></div>
+            <div><label>İletişim Gücü (1-10)</label><input type="range" id="commSkill" min="1" max="10" value="7" oninput="updateLeadership()"><span id="commVal">7</span></div>
+            <div><label>Hedef Belirleme Alışkanlığı (1-10)</label><input type="range" id="goalSkill" min="1" max="10" value="6" oninput="updateLeadership()"><span id="goalVal">6</span></div>
+            <button onclick="analyzeLeadership()">📈 Liderlik Raporu Oluştur</button>
+            <div id="leadershipReport" class="analysis-box">Liderlik analizi için butona tıklayın.</div>
+        </div>
+    </div>
+
+    <!-- 90 GÜNLÜK FIRE YOL HARİTASI -->
+    <div class="card">
+        <h3>🗺️ 90 Günlük FIRE Yol Haritası - Detaylı Aksiyon Planı</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+            <div class="phase-card">
+                <h4 style="color: #60a5fa;">🔵 HAFTA 1-4: Finansal Temizlik</h4>
+                <ul style="font-size: 0.7rem; margin-left: 20px;">
+                    <li>✓ Hafta 1: Tüm harcamaları kaydet, gereksiz abonelikleri iptal et</li>
+                    <li>✓ Hafta 2: Borç listesini çıkar, en yüksek faizli borcu kapatmaya başla</li>
+                    <li>✓ Hafta 3: Acil durum fonu oluştur (3 aylık gider)</li>
+                    <li>✓ Hafta 4: Minimum yaşam maliyetini netleştir, bütçe oluştur</li>
+                </ul>
+                <div class="progress-bar mt-2"><div class="progress-fill" id="phase1Progress" style="width:0%"></div></div>
+            </div>
+            <div class="phase-card">
+                <h4 style="color: #fbbf24;">🟡 HAFTA 5-8: Gelir Artırma</h4>
+                <ul style="font-size: 0.7rem; margin-left: 20px;">
+                    <li>✓ Hafta 5: Yetenek envanteri çıkar, freelance profili oluştur</li>
+                    <li>✓ Hafta 6: Ek gelir kaynağı bul (danışmanlık/dijital ürün)</li>
+                    <li>✓ Hafta 7: Pasif gelir fikirlerini araştır, birini başlat</li>
+                    <li>✓ Hafta 8: Gelir hedefini kontrol et, %30 artış sağla</li>
+                </ul>
+                <div class="progress-bar mt-2"><div class="progress-fill" id="phase2Progress" style="width:0%"></div></div>
+            </div>
+            <div class="phase-card">
+                <h4 style="color: #ef4444;">🔴 HAFTA 9-12: Yatırım & Ölçekleme</h4>
+                <ul style="font-size: 0.7rem; margin-left: 20px;">
+                    <li>✓ Hafta 9: Yatırım hesabı aç, risk profilini belirle</li>
+                    <li>✓ Hafta 10: Düzenli yatırım otomasyonu kur (otomatik kesinti)</li>
+                    <li>✓ Hafta 11: Pasif gelir kaynağını büyüt, çeşitlendir</li>
+                    <li>✓ Hafta 12: 90 günlük net servet artışını hesapla, yeni hedef belirle</li>
+                </ul>
+                <div class="progress-bar mt-2"><div class="progress-fill" id="phase3Progress" style="width:0%"></div></div>
+            </div>
+        </div>
+        <div class="flex-between" style="margin-top: 16px;">
+            <button onclick="updatePhaseProgress()">📊 Yol Haritası İlerleme Güncelle</button>
+            <button onclick="generateFullReport()" class="btn-secondary">📄 Kapsamlı Rapor Oluştur</button>
+        </div>
+        <div id="roadmapReport" class="analysis-box"></div>
+    </div>
+
+    <!-- 3 Faza Göre 90 Günlük Strateji -->
+    <div class="card">
+        <h3>🧭 90 Günlük FIRE Strateji Haritası</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+            <div class="phase-card">
+                <h4 style="color: #60a5fa;">🔵 Faz 1 (Gün 1-30): Finansal Temizlik</h4>
+                <ul style="font-size: 0.75rem; margin-left: 20px; margin-top: 8px;">
+                    <li>✓ Gider analizi & gereksiz harcamaları kes</li>
+                    <li>✓ Minimum yaşam maliyeti hesapla</li>
+                    <li>✓ Borç yapılandırma / kapatma</li>
+                    <li>✓ 30 günlük nakit akışı stabilize et</li>
+                </ul>
+                <div style="margin-top: 10px;"><strong>Minimum Yaşam Maliyeti:</strong> <span id="minLivingCost">-- ₺</span></div>
+            </div>
+            <div class="phase-card">
+                <h4 style="color: #fbbf24;">🟡 Faz 2 (Gün 31-60): Gelir Artırma</h4>
+                <ul style="font-size: 0.75rem; margin-left: 20px; margin-top: 8px;">
+                    <li>✓ Ek gelir kaynakları (freelance/dijital ürün)</li>
+                    <li>✓ Aktif gelir artırma sistemi kur</li>
+                    <li>✓ Hedef: +%30-%100 gelir artışı</li>
+                    <li>✓ Yetenek monetizasyonu</li>
+                </ul>
+                <div style="margin-top: 10px;"><strong>Hedef Gelir:</strong> <span id="targetIncomePhase2">-- ₺</span></div>
+            </div>
+            <div class="phase-card">
+                <h4 style="color: #ef4444;">🔴 Faz 3 (Gün 61-90): Yatırım & Ölçekleme</h4>
+                <ul style="font-size: 0.75rem; margin-left: 20px; margin-top: 8px;">
+                    <li>✓ Tasarrufları yatırıma yönlendir</li>
+                    <li>✓ Risk profili & portföy dağılımı</li>
+                    <li>✓ Pasif gelir başlangıcı</li>
+                    <li>✓ Yatırım otomasyonu</li>
+                </ul>
+                <div style="margin-top: 10px;"><strong>Pasif Gelir Hedefi:</strong> <span id="passiveTargetPhase3">-- ₺</span></div>
             </div>
         </div>
     </div>
-    
-    <div class="main-content">
-        <h1 id="pageTitle" style="color:#d4af37; margin-bottom: 20px;">Liderlik Danışmanlığı</h1>
-        
-        <!-- LİDERLİK SAYFASI -->
-        <div id="page-leadership">
-            <div class="card">
-                <h3>🧭 Liderlik Stili Analizi</h3>
-                <div class="grid-2">
-                    <div><label>📌 Karar Verme (1=Otokratik, 10=Demokratik)</label><input type="range" id="ld_decision" min="1" max="10" value="6" oninput="updateVal('ld_decision','ld_d_val')"><span id="ld_d_val">6</span><div class="analysis-box" style="margin-top:5px">🔍 Otokratik: Hızlı karar | Demokratik: Ekip katılımlı</div></div>
-                    <div><label>🎯 Vizyonerlik (1=Düşük, 10=Yüksek)</label><input type="range" id="ld_vision" min="1" max="10" value="7" oninput="updateVal('ld_vision','ld_v_val')"><span id="ld_v_val">7</span></div>
-                    <div><label>💬 İletişim Becerisi</label><input type="range" id="ld_comm" min="1" max="10" value="7" oninput="updateVal('ld_comm','ld_c_val')"><span id="ld_c_val">7</span></div>
-                    <div><label>⚡ Kriz Yönetimi</label><input type="range" id="ld_crisis" min="1" max="10" value="6" oninput="updateVal('ld_crisis','ld_cr_val')"><span id="ld_cr_val">6</span></div>
-                    <div><label>🤝 Empati & EQ</label><input type="range" id="ld_empathy" min="1" max="10" value="7" oninput="updateVal('ld_empathy','ld_e_val')"><span id="ld_e_val">7</span></div>
-                    <div><label>🏆 Motivasyon Yeteneği</label><input type="range" id="ld_motivation" min="1" max="10" value="7" oninput="updateVal('ld_motivation','ld_m_val')"><span id="ld_m_val">7</span></div>
-                </div>
-                <button onclick="analyzeLeadership()">📊 Liderlik Raporu Oluştur</button>
-                <div id="leadershipReport" class="analysis-box">Liderlik analizi yapmak için butona tıklayın.</div>
-            </div>
+
+    <!-- Senaryo Analizi Tablosu -->
+    <div class="card">
+        <h3>📊 90 Gün Sonu Senaryo Analizi (Net Varlık & Tasarruf Oranı)</h3>
+        <table id="scenarioTable">
+            <thead><tr><th>Senaryo</th><th>90 Gün Net Varlık</th><th>Tasarruf Oranı</th><th>Yatırım Kapasitesi</th><th>FIRE Gap</th></tr></thead>
+            <tbody id="scenarioBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Davranış Sistemi & Haftalık Review -->
+    <div class="dashboard-grid">
+        <div class="card">
+            <h3>🧠 Davranış Sistemi: Para Kaçıran Alışkanlıklar</h3>
+            <ul style="font-size: 0.75rem; margin-left: 20px;">
+                <li>🔴 Bilinçsiz abonelikler (dizi/platform) - Yıllık 5000₺ kayıp</li>
+                <li>🔴 Dışarıda gereksiz yeme içme - Aylık 2000-5000₺ kayıp</li>
+                <li>🔴 Anlık indirimlerle plansız alışveriş - Aylık 1000-3000₺ kayıp</li>
+                <li>🔴 Kredi kartı döngüsü ve faiz - Yıllık %36-60 maliyet</li>
+            </ul>
+            <h4 style="margin-top: 12px;">✅ Gelir Artıran Davranışlar</h4>
+            <ul style="font-size: 0.75rem; margin-left: 20px;">
+                <li>🟢 Sabah 1 saat yetenek geliştirme - Aylık +5000₺ potansiyel</li>
+                <li>🟢 Haftada 1 dijital ürün / freelance teklifi - Aylık +10000₺ potansiyel</li>
+                <li>🟢 Networking & iş birliği görüşmeleri - Uzun vadeli büyüme</li>
+            </ul>
         </div>
-        
-        <!-- YÖNETİM SAYFASI -->
-        <div id="page-management" class="hidden">
-            <div class="card">
-                <h3>📊 Yönetim Kapasite Analizi</h3>
-                <div class="grid-2">
-                    <div><label>🏢 Stratejik Planlama</label><input type="range" id="mg_strategy" min="1" max="10" value="6" oninput="updateVal('mg_strategy','mg_s_val')"><span id="mg_s_val">6</span></div>
-                    <div><label>📋 Operasyonel Verimlilik</label><input type="range" id="mg_ops" min="1" max="10" value="6" oninput="updateVal('mg_ops','mg_o_val')"><span id="mg_o_val">6</span></div>
-                    <div><label>👥 İK Yönetimi</label><input type="range" id="mg_hr" min="1" max="10" value="6" oninput="updateVal('mg_hr','mg_h_val')"><span id="mg_h_val">6</span></div>
-                    <div><label>💰 Finansal Yönetim</label><input type="range" id="mg_finance" min="1" max="10" value="6" oninput="updateVal('mg_finance','mg_f_val')"><span id="mg_f_val">6</span></div>
-                    <div><label>📢 Kurumsal İletişim</label><input type="range" id="mg_comms" min="1" max="10" value="6" oninput="updateVal('mg_comms','mg_co_val')"><span id="mg_co_val">6</span></div>
-                    <div><label>🔄 Değişim Yönetimi</label><input type="range" id="mg_change" min="1" max="10" value="6" oninput="updateVal('mg_change','mg_ch_val')"><span id="mg_ch_val">6</span></div>
-                </div>
-                <button onclick="analyzeManagement()">📊 Yönetim Raporu Oluştur</button>
-                <div id="managementReport" class="analysis-box">Yönetim analizi yapmak için butona tıklayın.</div>
-            </div>
-        </div>
-        
-        <!-- FİNANS SAYFASI -->
-        <div id="page-financial" class="hidden">
-            <div class="card">
-                <h3>💰 Finansal Sağlık</h3>
-                <div class="grid-2">
-                    <div><label>Yıllık Ciro (₺)</label><input type="number" id="fin_revenue" value="5000000"></div>
-                    <div><label>Yıllık Net Kar (₺)</label><input type="number" id="fin_profit" value="750000"></div>
-                    <div><label>Toplam Aktif (₺)</label><input type="number" id="fin_assets" value="3000000"></div>
-                    <div><label>Toplam Borç (₺)</label><input type="number" id="fin_liabilities" value="1200000"></div>
-                </div>
-                <button onclick="analyzeFinancial()">Analiz Et</button>
-                <div id="financialReport" class="analysis-box"></div>
-            </div>
-        </div>
-        
-        <!-- EKİP SAYFASI -->
-        <div id="page-team" class="hidden">
-            <div class="card">
-                <h3>👥 Ekip Performansı</h3>
-                <div class="grid-2">
-                    <div><label>Ekip Büyüklüğü</label><input type="number" id="team_size" value="10"></div>
-                    <div><label>Yıllık Devir Oranı (%)</label><input type="number" id="team_turnover" value="15"></div>
-                    <div><label>Verimlilik (1-10)</label><input type="range" id="team_productivity" min="1" max="10" value="7" oninput="updateVal('team_productivity','tp_val')"><span id="tp_val">7</span></div>
-                    <div><label>Memnuniyet (1-10)</label><input type="range" id="team_satisfaction" min="1" max="10" value="7" oninput="updateVal('team_satisfaction','ts_val')"><span id="ts_val">7</span></div>
-                </div>
-                <button onclick="analyzeTeam()">Ekip Analizi</button>
-                <div id="teamReport" class="analysis-box"></div>
-            </div>
-        </div>
-        
-        <!-- ADMIN SAYFASI -->
-        <div id="page-admin" class="hidden">
-            <div class="card">
-                <h3>🔐 Yönetim Paneli</h3>
-                <div id="adminUsersList" class="analysis-box"></div>
-                <div class="grid-2">
-                    <input type="text" id="newUsername" placeholder="Yeni Kullanıcı Adı">
-                    <input type="password" id="newPassword" placeholder="Şifre">
-                    <input type="text" id="newFullname" placeholder="Ad Soyad">
-                    <button onclick="addNewUser()">➕ Kullanıcı Ekle</button>
-                </div>
-                <button onclick="exportData()" style="margin-top:10px;">📥 Verileri Dışa Aktar</button>
-                <button onclick="resetAll()" class="logout-btn" style="margin-top:10px;">⚠️ Tüm Sistemi Sıfırla</button>
+        <div class="card">
+            <h3>📅 Haftalık Review Sistemi</h3>
+            <div class="phase-card">
+                <p><strong>Her Hafta Sonu Yapılacaklar:</strong></p>
+                <ul style="font-size: 0.75rem; margin-left: 20px;">
+                    <li>📊 Net servet hesapla</li>
+                    <li>💸 Gider optimizasyon kontrolü</li>
+                    <li>📈 Gelir performans analizi</li>
+                    <li>🎯 Haftalık tasarruf hedefini kontrol et</li>
+                    <li>📝 Gelecek hafta aksiyon planı çıkar</li>
+                </ul>
+                <button onclick="generateWeeklyReport()" style="margin-top: 10px;">📋 Haftalık Rapor Oluştur</button>
+                <div id="weeklyReport" class="analysis-box" style="margin-top: 8px; font-size: 0.7rem;"></div>
             </div>
         </div>
     </div>
-    
+
+    <!-- Günlük Checklist -->
+    <div class="card">
+        <h3>✅ Günlük FIRE Checklist (Her Gün Yapılacaklar)</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+            <label><input type="checkbox" id="checkIncome" onchange="saveChecklist()"> 📌 Gelir/gider kaydet</label>
+            <label><input type="checkbox" id="checkAction" onchange="saveChecklist()"> 🎯 1 finansal aksiyon</label>
+            <label><input type="checkbox" id="checkRevenue" onchange="saveChecklist()"> 💰 1 gelir artırma hareketi</label>
+            <label><input type="checkbox" id="checkLearn" onchange="saveChecklist()"> 📚 15 dk finansal okuryazarlık</label>
+            <label><input type="checkbox" id="checkMental" onchange="saveChecklist()"> 🧘 10 dk meditasyon/nefes</label>
+        </div>
+        <div id="checklistStatus" class="analysis-box" style="margin-top: 10px;">Bugünkü ilerleme: 0/5 tamamlandı</div>
+    </div>
+
     <footer>
-        <div>🌐 Anadolu Network | 📲 0541 866 02 02 | 📧 orhanboyraz0216@gmail.com | Orhan BOYRAZ</div>
-        <div>© 2025 - Liderlik & Yönetim Platformu</div>
+        <div>🌐 <a href="#" target="_blank">Anadolu Network</a> | <a href="#" target="_blank">Odak Dijital</a> | <a href="#" target="_blank">Ortak Markets</a></div>
+        <div>📲 <a href="https://wa.me/905418660202">0541 866 02 02</a> | 📧 orhanboyraz0216@gmail.com | Nilüfer/BURSA | Orhan BOYRAZ</div>
+        <div style="font-size:0.6rem;">🔥 FIRE Formülü: Hedef = Yıllık Gider × 25 | Aylık Hedef Tasarruf = FIRE Gap / 90 Gün</div>
+        <div style="font-size:0.6rem;">© 2025 Anadolu Network - Eğitim ve Bilgi Amaçlıdır, Yatırım Tavsiyesi Değildir.</div>
     </footer>
 </div>
 
 <script>
-    // KULLANICI SİSTEMİ
-    let users = JSON.parse(localStorage.getItem("an_users")) || [
-        { username: "admin", password: "admin123", name: "Orhan Boyraz" }
-    ];
+    let currentDay = localStorage.getItem("fire_day") ? parseInt(localStorage.getItem("fire_day")) : 0;
+    let userPlan = { activeIncome: 45000, passiveIncome: 5000, extraIncome: 0, fixedExpense: 18000, variableExpense: 7000, wasteExpense: 4000, savings: 450000, investments: 300000, debt: 80000 };
+    let phaseProgress = { phase1: 0, phase2: 0, phase3: 0 };
     
-    function saveUsers() { localStorage.setItem("an_users", JSON.stringify(users)); }
-    
-    function doLogin() {
-        let user = document.getElementById("loginUser").value;
-        let pass = document.getElementById("loginPass").value;
-        let found = users.find(u => u.username === user && u.password === pass);
-        if(found) {
-            localStorage.setItem("an_current", JSON.stringify(found));
-            document.getElementById("loginScreen").style.display = "none";
-            document.getElementById("dashboard").style.display = "block";
-            document.getElementById("userNameDisplay").innerText = found.name;
-            showPage('leadership');
-        } else {
-            document.getElementById("loginMsg").innerText = "Hatalı giriş! admin / admin123 veya kayıt olun.";
-        }
+    function loadValues() {
+        document.getElementById("activeIncome").value = userPlan.activeIncome;
+        document.getElementById("passiveIncome").value = userPlan.passiveIncome;
+        document.getElementById("extraIncome").value = userPlan.extraIncome;
+        document.getElementById("fixedExpense").value = userPlan.fixedExpense;
+        document.getElementById("variableExpense").value = userPlan.variableExpense;
+        document.getElementById("wasteExpense").value = userPlan.wasteExpense;
+        document.getElementById("savings").value = userPlan.savings;
+        document.getElementById("investments").value = userPlan.investments;
+        document.getElementById("debt").value = userPlan.debt;
     }
     
-    function doRegister() {
-        let user = prompt("Kullanıcı Adı:");
-        let pass = prompt("Şifre:");
-        let name = prompt("Ad Soyad:");
-        if(user && pass) {
-            if(users.find(u=>u.username===user)) { alert("Bu kullanıcı zaten var!"); return; }
-            users.push({ username: user, password: pass, name: name || user });
-            saveUsers();
-            alert("Kayıt başarılı! Şimdi giriş yapabilirsiniz.");
-        }
+    function saveUserData() {
+        userPlan.activeIncome = parseFloat(document.getElementById("activeIncome").value) || 0;
+        userPlan.passiveIncome = parseFloat(document.getElementById("passiveIncome").value) || 0;
+        userPlan.extraIncome = parseFloat(document.getElementById("extraIncome").value) || 0;
+        userPlan.fixedExpense = parseFloat(document.getElementById("fixedExpense").value) || 0;
+        userPlan.variableExpense = parseFloat(document.getElementById("variableExpense").value) || 0;
+        userPlan.wasteExpense = parseFloat(document.getElementById("wasteExpense").value) || 0;
+        userPlan.savings = parseFloat(document.getElementById("savings").value) || 0;
+        userPlan.investments = parseFloat(document.getElementById("investments").value) || 0;
+        userPlan.debt = parseFloat(document.getElementById("debt").value) || 0;
+        localStorage.setItem("fire_user_data", JSON.stringify(userPlan));
     }
     
-    function logout() {
-        localStorage.removeItem("an_current");
-        document.getElementById("dashboard").style.display = "none";
-        document.getElementById("loginScreen").style.display = "flex";
+    function updateAll() {
+        saveUserData();
+        calculateDashboard();
+        updateScenarios();
+        calculateMinLiving();
     }
     
-    // SAYFA GEÇİŞİ
-    function showPage(page) {
-        document.querySelectorAll('.main-content > div').forEach(div => div.classList.add('hidden'));
-        document.getElementById(`page-${page}`).classList.remove('hidden');
-        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-        event.target.classList.add('active');
-        let titles = { leadership: "Liderlik Danışmanlığı", management: "Yönetim Danışmanlığı", financial: "Finansal Yönetim", team: "Ekip & Performans", admin: "Yönetim Paneli" };
-        document.getElementById("pageTitle").innerText = titles[page];
-        if(page === 'admin') loadAdminPanel();
+    function calculateDashboard() {
+        let totalIncome = userPlan.activeIncome + userPlan.passiveIncome + userPlan.extraIncome;
+        let totalExpense = userPlan.fixedExpense + userPlan.variableExpense + userPlan.wasteExpense;
+        let netWorth = userPlan.savings + userPlan.investments - userPlan.debt;
+        let savingsRate = totalIncome > 0 ? ((totalIncome - totalExpense) / totalIncome * 100) : 0;
+        let investmentCapacity = Math.max(0, totalIncome - totalExpense);
+        let annualExpense = totalExpense * 12;
+        let fireTarget = annualExpense * 25;
+        let fireGap = Math.max(0, fireTarget - netWorth);
+        
+        document.getElementById("totalIncomeDisplay").innerHTML = `Toplam Gelir: ${totalIncome.toLocaleString()} ₺`;
+        document.getElementById("totalExpenseDisplay").innerHTML = `Toplam Gider: ${totalExpense.toLocaleString()} ₺ | Kesilebilir: ${userPlan.wasteExpense.toLocaleString()} ₺`;
+        document.getElementById("netWorthDisplay").innerHTML = `Net Servet: ${netWorth.toLocaleString()} ₺`;
+        document.getElementById("savingsRateDisplay").innerHTML = `%${savingsRate.toFixed(1)}`;
+        document.getElementById("savingsRateBar").style.width = `${Math.min(100, savingsRate)}%`;
+        document.getElementById("investmentCapacity").innerHTML = `Yatırım Kapasitesi: ${investmentCapacity.toLocaleString()} ₺/ay`;
+        document.getElementById("fireGapDisplay").innerHTML = `🎯 FIRE Hedef: ${fireTarget.toLocaleString()} ₺ | Gap: ${fireGap.toLocaleString()} ₺ | ${((netWorth/fireTarget)*100).toFixed(1)}% tamamlandı`;
+        
+        document.getElementById("kpiGrid").innerHTML = `
+            <div class="kpi-card"><div class="kpi-label">Aylık Net Gelir</div><div class="kpi-value">${(totalIncome - totalExpense).toLocaleString()} ₺</div><div class="kpi-trend">📈 Gelir: ${totalIncome.toLocaleString()}</div></div>
+            <div class="kpi-card"><div class="kpi-label">Aylık Gider</div><div class="kpi-value">${totalExpense.toLocaleString()} ₺</div><div class="kpi-trend">💸 Kesilebilir: ${userPlan.wasteExpense.toLocaleString()}</div></div>
+            <div class="kpi-card"><div class="kpi-label">Tasarruf Oranı</div><div class="kpi-value">%${savingsRate.toFixed(1)}</div><div class="kpi-trend">Hedef: >%50</div></div>
+            <div class="kpi-card"><div class="kpi-label">Yatırım Miktarı</div><div class="kpi-value">${userPlan.investments.toLocaleString()} ₺</div><div class="kpi-trend">+ Aylık ${investmentCapacity.toLocaleString()}</div></div>
+            <div class="kpi-card"><div class="kpi-label">Net Servet</div><div class="kpi-value">${netWorth.toLocaleString()} ₺</div><div class="kpi-trend">🎯 Hedef: ${fireTarget.toLocaleString()}</div></div>
+            <div class="kpi-card"><div class="kpi-label">Pasif Gelir</div><div class="kpi-value">${userPlan.passiveIncome.toLocaleString()} ₺</div><div class="kpi-trend">Hedef: >%30 gelir</div></div>
+        `;
     }
     
-    function updateVal(inputId, spanId) { document.getElementById(spanId).innerText = document.getElementById(inputId).value; }
+    function calculateMinLiving() {
+        let minLiving = userPlan.fixedExpense + (userPlan.variableExpense * 0.5);
+        document.getElementById("minLivingCost").innerHTML = `${minLiving.toLocaleString()} ₺/ay`;
+        document.getElementById("targetIncomePhase2").innerHTML = `${Math.round((userPlan.activeIncome + userPlan.extraIncome) * 1.5).toLocaleString()} ₺ (+%50 hedef)`;
+        document.getElementById("passiveTargetPhase3").innerHTML = `${Math.round(userPlan.passiveIncome * 1.8).toLocaleString()} ₺ (+%80 büyüme)`;
+    }
     
-    // LİDERLİK ANALİZİ
+    function runScenario(type) {
+        let totalIncome = userPlan.activeIncome + userPlan.passiveIncome + userPlan.extraIncome;
+        let totalExpense = userPlan.fixedExpense + userPlan.variableExpense + userPlan.wasteExpense;
+        let netWorth = userPlan.savings + userPlan.investments - userPlan.debt;
+        let monthlySave = totalIncome - totalExpense;
+        let multiplier, incomeGrowth, expenseReduction;
+        if(type === 'conservative') { multiplier = 0.6; incomeGrowth = 1.05; expenseReduction = 0.95; }
+        else if(type === 'base') { multiplier = 1; incomeGrowth = 1.15; expenseReduction = 0.9; }
+        else { multiplier = 1.5; incomeGrowth = 1.35; expenseReduction = 0.8; }
+        
+        let newIncome = totalIncome * incomeGrowth;
+        let newExpense = totalExpense * expenseReduction;
+        let newMonthlySave = newIncome - newExpense;
+        let threeMonthSave = monthlySave * 3 * multiplier;
+        let finalNetWorth = netWorth + threeMonthSave;
+        let savingsRate = (newMonthlySave / newIncome) * 100;
+        let annualExpense = newExpense * 12;
+        let fireTarget = annualExpense * 25;
+        let fireGap = Math.max(0, fireTarget - finalNetWorth);
+        
+        document.getElementById("scenarioBody").innerHTML = `
+            <tr style="background:rgba(59,130,246,0.1)"><td><strong>🟦 Conservative</strong></td><td><strong>${Math.round(finalNetWorth).toLocaleString()} ₺</strong></td><td>%${savingsRate.toFixed(1)}</td><td>${Math.round(newMonthlySave).toLocaleString()} ₺/ay</td><td>${Math.round(fireGap).toLocaleString()} ₺</td></tr>
+            <tr style="background:rgba(16,185,129,0.1)"><td><strong>🟩 Base Case</strong></td><td><strong>${Math.round(netWorth + monthlySave*3).toLocaleString()} ₺</strong></td><td>%${((monthlySave/totalIncome)*100).toFixed(1)}</td><td>${Math.round(monthlySave).toLocaleString()} ₺/ay</td><td>${Math.round(Math.max(0,(totalExpense*12*25)-(netWorth+monthlySave*3))).toLocaleString()} ₺</td></tr>
+            <tr style="background:rgba(239,68,68,0.1)"><td><strong>🟥 Aggressive</strong></td><td><strong>${Math.round(netWorth + monthlySave*3*1.5).toLocaleString()} ₺</strong></td><td>%${Math.min(90,((newMonthlySave/newIncome)*100)).toFixed(1)}</td><td>${Math.round(newMonthlySave).toLocaleString()} ₺/ay</td><td>${Math.round(Math.max(0,fireTarget-finalNetWorth)).toLocaleString()} ₺</td></tr>
+        `;
+    }
+    
+    function updateScenarios() { runScenario('base'); }
+    
+    function optimizeExpenses() {
+        let waste = userPlan.wasteExpense;
+        let suggestion = waste > 0 ? `Gereksiz harcamalarınızdan ${Math.round(waste*0.7).toLocaleString()} ₺ kesebilirsiniz.` : "Tebrikler, gereksiz harcama yok!";
+        alert(`Optimizasyon Önerisi: ${suggestion}\nAylık tasarrufunuz ${(userPlan.activeIncome+userPlan.passiveIncome+userPlan.extraIncome - (userPlan.fixedExpense+userPlan.variableExpense+userPlan.wasteExpense)).toLocaleString()} ₺`);
+    }
+    
+    function markDay() {
+        if(currentDay >= 90) { alert("90 günü tamamladınız! Büyük başarı 🎉"); return; }
+        currentDay++;
+        localStorage.setItem("fire_day", currentDay);
+        document.getElementById("dayCounter").innerHTML = `${currentDay} / 90 Gün`;
+        document.getElementById("daysProgress").style.width = `${(currentDay/90)*100}%`;
+        let tasks = ["Gelir/gider kaydet", "1 finansal aksiyon", "1 gelir artırma hareketi", "Harcama optimizasyonu"];
+        document.getElementById("dailyTask").innerHTML = `✅ Gün ${currentDay} tamamlandı! Yarınki aksiyon: ${tasks[currentDay % tasks.length]}`;
+        if(currentDay === 30) alert("🎯 Faz 1 tamamlandı! Minimum yaşam maliyetiniz hesaplandı. Faz 2'ye geçin!");
+        if(currentDay === 60) alert("🚀 Faz 2 tamamlandı! Geliriniz arttı. Şimdi Faz 3: Yatırım zamanı!");
+        if(currentDay === 90) alert("🏆 TEBRİKLER! 90 günlük FIRE planını tamamladınız!");
+    }
+    
+    function resetProgress() { if(confirm("Gün sıfırlansın mı?")){ currentDay=0; localStorage.setItem("fire_day",0); document.getElementById("dayCounter").innerHTML = "0 / 90 Gün"; document.getElementById("daysProgress").style.width = "0%"; document.getElementById("dailyTask").innerHTML = "📌 Bugünün finansal aksiyonu: Gelir/gider kaydet + 1 gelir artırma hareketi"; } }
+    
+    function saveChecklist() {
+        let checks = [document.getElementById("checkIncome")?.checked, document.getElementById("checkAction")?.checked, document.getElementById("checkRevenue")?.checked, document.getElementById("checkLearn")?.checked, document.getElementById("checkMental")?.checked];
+        let count = checks.filter(c=>c).length;
+        document.getElementById("checklistStatus").innerHTML = `Bugünkü ilerleme: ${count}/5 tamamlandı ${count===5?"🎉 Harika!":count>=3?"👏 Devam et":"⚠️ Harekete geç!"}`;
+        localStorage.setItem("fire_checklist", JSON.stringify(checks));
+    }
+    
+    function loadChecklist() { let saved = localStorage.getItem("fire_checklist"); if(saved){ let arr=JSON.parse(saved); if(arr.length>=4){ document.getElementById("checkIncome").checked=arr[0]||false; document.getElementById("checkAction").checked=arr[1]||false; document.getElementById("checkRevenue").checked=arr[2]||false; document.getElementById("checkLearn").checked=arr[3]||false; if(arr[4]!==undefined) document.getElementById("checkMental").checked=arr[4]; saveChecklist(); } } }
+    
+    function generateWeeklyReport() {
+        let totalIncome = userPlan.activeIncome + userPlan.passiveIncome + userPlan.extraIncome;
+        let totalExpense = userPlan.fixedExpense + userPlan.variableExpense + userPlan.wasteExpense;
+        let netWorth = userPlan.savings + userPlan.investments - userPlan.debt;
+        document.getElementById("weeklyReport").innerHTML = `📊 HAFTALIK RAPOR | Net Servet: ${netWorth.toLocaleString()} ₺ | Gelir: ${totalIncome.toLocaleString()} | Gider: ${totalExpense.toLocaleString()} | Tasarruf: ${(totalIncome-totalExpense).toLocaleString()} ₺ | Öneri: ${totalExpense>totalIncome*0.6?"Giderleri kısın, gereksiz harcamaları azaltın.":"Tasarruf oranınız iyi, yatırıma yönelin."}`;
+    }
+    
+    // MENTAL SAĞLIK FONKSİYONLARI
+    function updateMental() {
+        document.getElementById("stressVal").innerHTML = document.getElementById("mentalStress").value;
+        document.getElementById("sleepVal").innerHTML = document.getElementById("mentalSleep").value;
+        document.getElementById("motivationVal").innerHTML = document.getElementById("mentalMotivation").value;
+    }
+    
+    function analyzeMental() {
+        let stress = parseInt(document.getElementById("mentalStress").value);
+        let sleep = parseInt(document.getElementById("mentalSleep").value);
+        let motivation = parseInt(document.getElementById("mentalMotivation").value);
+        let focus = parseInt(document.getElementById("focusHours").value);
+        let mentalScore = ((10-stress) + sleep + motivation) / 3;
+        let report = `🧠 MENTAL SAĞLIK RAPORU\n\n`;
+        report += `📊 Mental Performans Puanı: ${mentalScore.toFixed(1)}/10 - ${mentalScore>=7?"🌸 Mükemmel durumdasınız":mentalScore>=5?"⚠️ Orta seviye, iyileştirme gerekli":"🔴 Acil müdahale gerekli"}\n`;
+        report += `😰 Stres: ${stress}/10 - ${stress<=4?"Düşük, iyi":stress<=7?"Orta, yönetilebilir":"Yüksek, destek alın"}\n`;
+        report += `💤 Uyku: ${sleep}/10 - ${sleep>=7?"Kaliteli uyku, karar verme gücü yüksek":sleep>=5?"Orta, düzenlenmeli":"Yetersiz, performans düşer"}\n`;
+        report += `🚀 Motivasyon: ${motivation}/10 - ${motivation>=7?"Yüksek enerji, hedeflere odaklan":motivation>=5?"Orta, rutin oluşturun":"Düşük, küçük başarılar hedefleyin"}\n`;
+        report += `⏰ Odaklanma: ${focus} saat/gün - ${focus>=6?"Çok iyi":focus>=4?"Yeterli":"Artırılmalı"}\n\n`;
+        report += `✅ ÖNERİLER:\n`;
+        if(stress>6) report += `• Günlük 10 dakika meditasyon veya nefes egzersizi yapın\n`;
+        if(sleep<6) report += `• Uyku düzeniniz düzeltin, yatmadan 1 saat önce ekran kullanmayın\n`;
+        if(motivation<6) report += `• Hedeflerinizi küçük parçalara bölün ve her gün 1 tanesini tamamlayın\n`;
+        if(focus<4) report += `• Pomodoro tekniği (25 dk çalışma, 5 dk mola) uygulayın\n`;
+        document.getElementById("mentalReport").innerHTML = report.replace(/\n/g,'<br>');
+    }
+    
+    // LİDERLİK FONKSİYONLARI
+    function updateLeadership() {
+        document.getElementById("leadVal").innerHTML = document.getElementById("leadLevel").value;
+        document.getElementById("decisionVal").innerHTML = document.getElementById("decisionSkill").value;
+        document.getElementById("commVal").innerHTML = document.getElementById("commSkill").value;
+        document.getElementById("goalVal").innerHTML = document.getElementById("goalSkill").value;
+    }
+    
     function analyzeLeadership() {
-        let d = parseInt(document.getElementById('ld_decision').value);
-        let v = parseInt(document.getElementById('ld_vision').value);
-        let c = parseInt(document.getElementById('ld_comm').value);
-        let cr = parseInt(document.getElementById('ld_crisis').value);
-        let e = parseInt(document.getElementById('ld_empathy').value);
-        let m = parseInt(document.getElementById('ld_motivation').value);
-        let avg = (d+v+c+cr+e+m)/6;
-        let style = d<=3 ? "Otokratik Lider" : (d<=7 ? "Demokratik Lider" : "Vizyoner Lider");
-        let report = `📊 LİDERLİK RAPORU<br><br>`;
-        report += `🎯 Liderlik Stili: ${style}<br>`;
-        report += `📈 Genel Puan: ${avg.toFixed(1)}/10 - ${avg>=7?"Güçlü Lider":avg>=5?"Gelişime Açık":"Acil Gelişim Gerekli"}<br><br>`;
-        report += `✅ GELİŞİM AKSİYONLARI:<br>`;
-        if(d<7) report += `• Karar süreçlerine ekibi dahil edin.<br>`;
-        if(v<7) report += `• 3 aylık stratejik hedefler belirleyin.<br>`;
-        if(c<7) report += `• Aktif dinleme ve geri bildirim kültürü oluşturun.<br>`;
-        if(cr<7) report += `• Kriz senaryoları için hazırlık yapın.<br>`;
-        if(e<7) report += `• Birebir görüşmelerle çalışanları dinleyin.<br>`;
-        if(m<7) report += `• Takdir ve ödüllendirme sistemi kurun.<br>`;
-        document.getElementById("leadershipReport").innerHTML = report;
+        let lead = parseInt(document.getElementById("leadLevel").value);
+        let decision = parseInt(document.getElementById("decisionSkill").value);
+        let comm = parseInt(document.getElementById("commSkill").value);
+        let goal = parseInt(document.getElementById("goalSkill").value);
+        let leadershipScore = (lead + decision + comm + goal) / 4;
+        let report = `🧭 LİDERLİK & KİŞİSEL GELİŞİM RAPORU\n\n`;
+        report += `📈 Liderlik Kapasitesi: ${leadershipScore.toFixed(1)}/10 - ${leadershipScore>=7?"🎯 Güçlü lider adayı":leadershipScore>=5?"📌 Gelişime açık":"⚠️ Liderlik becerileri acilen geliştirilmeli"}\n`;
+        report += `👑 Liderlik Seviyesi: ${lead}/10 - ${lead<=3?"Takipçi":lead<=6?"Orta kademe lider":"Vizyoner lider"}\n`;
+        report += `🎯 Karar Verme: ${decision}/10 - ${decision>=7?"Stratejik ve hızlı karar alıyor":decision>=5?"Analiz ediyor, cesaret gerek":"Karar almada zorlanıyor"}\n`;
+        report += `💬 İletişim: ${comm}/10 - ${comm>=7?"Etkili iletişim, ekip ikna gücü yüksek":comm>=5?"Geliştirilmeli, aktif dinleme şart":"İletişim kopukluğu var"}\n`;
+        report += `🎯 Hedef Belirleme: ${goal}/10 - ${goal>=7?"SMART hedefler kullanıyor":goal>=5?"Hedefler net değil":"Hedefsizlik başarısızlık getirir"}\n\n`;
+        report += `✅ LİDERLİK AKSİYONLARI:\n`;
+        if(decision<7) report += `• Her gün 1 önemli kararı bilinçli olarak alın ve sonucunu değerlendirin\n`;
+        if(comm<7) report += `• Haftada 3 kez aktif dinleme pratiği yapın, karşınızdakini özetleyin\n`;
+        if(goal<7) report += `• 90 günlük net hedefler belirleyin ve her sabah gözden geçirin\n`;
+        if(lead<6) report += `• Her hafta 1 liderlik kitabından 30 dk okuyun veya podcast dinleyin\n`;
+        document.getElementById("leadershipReport").innerHTML = report.replace(/\n/g,'<br>');
     }
     
-    // YÖNETİM ANALİZİ
-    function analyzeManagement() {
-        let s = parseInt(document.getElementById('mg_strategy').value);
-        let o = parseInt(document.getElementById('mg_ops').value);
-        let h = parseInt(document.getElementById('mg_hr').value);
-        let f = parseInt(document.getElementById('mg_finance').value);
-        let co = parseInt(document.getElementById('mg_comms').value);
-        let ch = parseInt(document.getElementById('mg_change').value);
-        let avg = (s+o+h+f+co+ch)/6;
-        let report = `📊 YÖNETİM RAPORU<br><br>`;
-        report += `📈 Genel Yönetim Skoru: ${avg.toFixed(1)}/10 - ${avg>=7?"Güçlü":avg>=5?"Orta":"Gelişmeli"}<br><br>`;
-        report += `✅ AKSİYONLAR:<br>`;
-        if(s<7) report += `• Stratejik planlama workshop'u düzenleyin.<br>`;
-        if(o<7) report += `• Süreç optimizasyonu yapın.<br>`;
-        if(h<7) report += `• Performans değerlendirme sistemi kurun.<br>`;
-        if(f<7) report += `• Aylık finansal raporlama başlatın.<br>`;
-        if(co<7) report += `• Haftalık ekip toplantıları yapın.<br>`;
-        if(ch<7) report += `• Değişim yönetimi eğitimi alın.<br>`;
-        document.getElementById("managementReport").innerHTML = report;
+    // YOL HARİTASI PROGRES
+    function updatePhaseProgress() {
+        let phase1 = Math.min(100, (currentDay/30)*100);
+        let phase2 = Math.min(100, Math.max(0, (currentDay-30)/30*100));
+        let phase3 = Math.min(100, Math.max(0, (currentDay-60)/30*100));
+        document.getElementById("phase1Progress").style.width = `${phase1}%`;
+        document.getElementById("phase2Progress").style.width = `${phase2}%`;
+        document.getElementById("phase3Progress").style.width = `${phase3}%`;
     }
     
-    function analyzeFinancial() {
-        let rev = parseFloat(document.getElementById('fin_revenue').value);
-        let profit = parseFloat(document.getElementById('fin_profit').value);
-        let assets = parseFloat(document.getElementById('fin_assets').value);
-        let liabilities = parseFloat(document.getElementById('fin_liabilities').value);
-        let margin = (profit/rev)*100;
-        let debtRatio = (liabilities/assets)*100;
-        let report = `💰 Kâr Marjı: %${margin.toFixed(1)} - ${margin>=15?"Çok İyi":margin>=5?"Orta":"Düşük"}<br>`;
-        report += `🏦 Borç/Aktif: %${debtRatio.toFixed(1)} - ${debtRatio<=50?"Sağlıklı":debtRatio<=70?"Orta Risk":"Yüksek Risk"}<br>`;
-        document.getElementById("financialReport").innerHTML = report;
+    function generateFullReport() {
+        let totalIncome = userPlan.activeIncome + userPlan.passiveIncome + userPlan.extraIncome;
+        let totalExpense = userPlan.fixedExpense + userPlan.variableExpense + userPlan.wasteExpense;
+        let netWorth = userPlan.savings + userPlan.investments - userPlan.debt;
+        let fireTarget = totalExpense * 12 * 25;
+        let report = `📋 90 GÜNLÜK FIRE YOL HARİTASI - KAPSAMLI RAPOR\n\n`;
+        report += `💰 FİNANSAL DURUM\n`;
+        report += `• Aylık Gelir: ${totalIncome.toLocaleString()} ₺\n`;
+        report += `• Aylık Gider: ${totalExpense.toLocaleString()} ₺\n`;
+        report += `• Net Servet: ${netWorth.toLocaleString()} ₺\n`;
+        report += `• FIRE Hedefi: ${fireTarget.toLocaleString()} ₺\n`;
+        report += `• Tamamlanma: ${((netWorth/fireTarget)*100).toFixed(1)}%\n\n`;
+        report += `🧭 90 GÜNLÜK AKSİYON PLANI\n`;
+        report += `• Gün ${currentDay}/90 tamamlandı\n`;
+        report += `• Kalan Gün: ${90-currentDay}\n`;
+        report += `• Faz 1 (Finansal Temizlik): ${Math.min(100, (currentDay/30)*100).toFixed(0)}% tamamlandı\n`;
+        report += `• Faz 2 (Gelir Artırma): ${Math.min(100, Math.max(0, (currentDay-30)/30*100)).toFixed(0)}% tamamlandı\n`;
+        report += `• Faz 3 (Yatırım): ${Math.min(100, Math.max(0, (currentDay-60)/30*100)).toFixed(0)}% tamamlandı\n\n`;
+        report += `💡 TAVSİYELER:\n`;
+        if(totalExpense/totalIncome > 0.6) report += `• Tasarruf oranınız %${((totalIncome-totalExpense)/totalIncome*100).toFixed(0)}, hedef %50 üzeri olmalı\n`;
+        if(userPlan.wasteExpense > 0) report += `• Gereksiz harcamalarınızı (${userPlan.wasteExpense.toLocaleString()}₺) keserek aylık tasarrufunuzu artırın\n`;
+        if(userPlan.passiveIncome/totalIncome < 0.2) report += `• Pasif gelir kaynakları geliştirmeye odaklanın\n`;
+        report += `\n📅 GÜNLÜK HATIRLATMA: Checklist'i tamamlayarak ilerlemeyi sürdürün!`;
+        document.getElementById("roadmapReport").innerHTML = report.replace(/\n/g,'<br>');
     }
     
-    function analyzeTeam() {
-        let turnover = parseFloat(document.getElementById('team_turnover').value);
-        let prod = parseInt(document.getElementById('team_productivity').value);
-        let sat = parseInt(document.getElementById('team_satisfaction').value);
-        let report = `📉 Devir Oranı: %${turnover} - ${turnover<=15?"Sağlıklı":turnover<=25?"Orta":"Yüksek Risk"}<br>`;
-        report += `⚡ Verimlilik: ${prod}/10 | 😊 Memnuniyet: ${sat}/10<br>`;
-        if(turnover>20) report += `• Çalışan bağlılığını artırın.<br>`;
-        if(prod<7) report += `• Hedef belirleme sistemini güçlendirin.<br>`;
-        document.getElementById("teamReport").innerHTML = report;
+    let savedData = localStorage.getItem("fire_user_data");
+    if(savedData) { userPlan = JSON.parse(savedData); loadValues(); }
+    else { loadValues(); }
+    
+    function init() {
+        loadValues();
+        updateAll();
+        document.getElementById("dayCounter").innerHTML = `${currentDay} / 90 Gün`;
+        document.getElementById("daysProgress").style.width = `${(currentDay/90)*100}%`;
+        loadChecklist();
+        calculateMinLiving();
+        updateScenarios();
+        updatePhaseProgress();
+        updateMental();
+        updateLeadership();
     }
-    
-    // ADMIN PANEL
-    function loadAdminPanel() {
-        let html = `<h4>👤 Mevcut Kullanıcılar</h4>`;
-        users.forEach(u => {
-            html += `<div class="flex-between"><span>${u.username} - ${u.name}</span>`;
-            if(u.username !== 'admin') html += `<button onclick="deleteUser('${u.username}')" class="logout-btn" style="padding:2px 8px;">Sil</button>`;
-            html += `</div>`;
-        });
-        document.getElementById("adminUsersList").innerHTML = html;
-    }
-    
-    function addNewUser() {
-        let user = document.getElementById("newUsername").value;
-        let pass = document.getElementById("newPassword").value;
-        let name = document.getElementById("newFullname").value;
-        if(!user || !pass) { alert("Kullanıcı adı ve şifre gerekli"); return; }
-        if(users.find(u=>u.username===user)) { alert("Zaten var"); return; }
-        users.push({ username: user, password: pass, name: name || user });
-        saveUsers();
-        loadAdminPanel();
-        document.getElementById("newUsername").value = "";
-        document.getElementById("newPassword").value = "";
-        document.getElementById("newFullname").value = "";
-        alert("Kullanıcı eklendi!");
-    }
-    
-    function deleteUser(username) { users = users.filter(u=>u.username !== username); saveUsers(); loadAdminPanel(); }
-    function exportData() { alert("Veriler dışa aktarıldı (konsola bakın)"); console.log("Kullanıcılar:", users); }
-    function resetAll() { if(confirm("TÜM VERİLER SİLİNECEK!")){ localStorage.clear(); location.reload(); } }
-    
-    // OTOMATİK GİRİŞ KONTROLÜ
-    let saved = localStorage.getItem("an_current");
-    if(saved) {
-        let user = JSON.parse(saved);
-        if(users.find(u=>u.username===user.username)) {
-            document.getElementById("loginScreen").style.display = "none";
-            document.getElementById("dashboard").style.display = "block";
-            document.getElementById("userNameDisplay").innerText = user.name;
-            showPage('leadership');
-        }
-    }
-    
-    // Range değerlerini güncelle
-    updateVal('ld_decision','ld_d_val');
-    updateVal('ld_vision','ld_v_val');
-    updateVal('ld_comm','ld_c_val');
-    updateVal('ld_crisis','ld_cr_val');
-    updateVal('ld_empathy','ld_e_val');
-    updateVal('ld_motivation','ld_m_val');
+    init();
 </script>
 </body>
 </html>
