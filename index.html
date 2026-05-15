@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Anadolu Network | Profesyonel Dashboard</title>
+    <title>Anadolu Network | Ultimate FIRE Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
@@ -15,7 +15,6 @@
             overflow-x: hidden;
         }
         
-        /* Dashboard Layout */
         .dashboard {
             display: flex;
             min-height: 100vh;
@@ -97,9 +96,9 @@
             margin-left: 280px;
             padding: 20px 24px;
             min-height: 100vh;
+            padding-bottom: 120px;
         }
         
-        /* Top Bar */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -139,7 +138,6 @@
             gap: 6px;
         }
         
-        /* Cards */
         .card {
             background: rgba(15, 42, 74, 0.7);
             backdrop-filter: blur(5px);
@@ -170,7 +168,6 @@
             margin: 12px 0 8px 0;
         }
         
-        /* Forms */
         input, select, textarea {
             background: rgba(7, 21, 46, 0.9);
             border: 1px solid #2a456b;
@@ -209,10 +206,6 @@
             color: #d4af37;
         }
         
-        .btn-secondary:hover {
-            background: #4a5568;
-        }
-        
         .btn-danger {
             background: #dc2626;
             color: white;
@@ -228,7 +221,6 @@
             white-space: pre-line;
         }
         
-        /* Grids */
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
@@ -249,9 +241,6 @@
             text-align: center;
             border: 1px solid #d4af37;
         }
-        
-        .fire-type-card h4 { margin: 0 0 8px 0; font-size: 0.8rem; }
-        .fire-type-card div { font-size: 0.7rem; color: #cbd5e1; }
         
         .product-item {
             background: rgba(30, 58, 95, 0.6);
@@ -324,7 +313,6 @@
             display: none !important;
         }
         
-        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -338,7 +326,6 @@
             border-radius: 3px;
         }
         
-        /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -365,6 +352,8 @@
                 align-items: center;
                 justify-content: center;
                 cursor: pointer;
+                font-size: 1.5rem;
+                color: #0a1a3a;
             }
         }
         
@@ -394,6 +383,67 @@
             max-height: 200px;
             margin-top: 10px;
         }
+        
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 25, 47, 0.98);
+            backdrop-filter: blur(10px);
+            border-top: 2px solid #d4af37;
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 0.7rem;
+            z-index: 99;
+            margin-left: 280px;
+        }
+        
+        @media (max-width: 768px) {
+            footer {
+                margin-left: 0;
+            }
+        }
+        
+        footer a {
+            color: #d4af37;
+            text-decoration: none;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #2d3748;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 5px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #d4af37, #f5e6a3);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        
+        .kpi-card {
+            background: rgba(7, 21, 46, 0.6);
+            border-radius: 16px;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        .badge { padding: 4px 12px; border-radius: 30px; font-size: 0.7rem; }
+        .badge-conservative { background: #3b82f6; color: white; }
+        .badge-base { background: #10b981; color: white; }
+        .badge-aggressive { background: #ef4444; color: white; }
+        
+        .phase-card {
+            background: rgba(7, 21, 46, 0.6);
+            border-radius: 16px;
+            padding: 12px;
+            margin-top: 12px;
+        }
     </style>
 </head>
 <body>
@@ -408,54 +458,19 @@
                 <p>FIRE & Danışmanlık</p>
             </div>
             <div class="nav-menu">
-                <div class="nav-item active" data-page="profile">
-                    <span class="nav-icon">👤</span>
-                    <span class="nav-label">Profil & Abonelik</span>
-                </div>
-                <div class="nav-item" data-page="ai">
-                    <span class="nav-icon">✨</span>
-                    <span class="nav-label">AI İçerik & E-Kitap</span>
-                </div>
-                <div class="nav-item" data-page="fire">
-                    <span class="nav-icon">🔥</span>
-                    <span class="nav-label">FIRE Hesaplama</span>
-                </div>
-                <div class="nav-item" data-page="health">
-                    <span class="nav-icon">💰</span>
-                    <span class="nav-label">Finansal Sağlık</span>
-                </div>
-                <div class="nav-item" data-page="portfolio">
-                    <span class="nav-icon">📈</span>
-                    <span class="nav-label">Portföy Yönetimi</span>
-                </div>
-                <div class="nav-item" data-page="cfo">
-                    <span class="nav-icon">📊</span>
-                    <span class="nav-label">CFO Danışmanlığı</span>
-                </div>
-                <div class="nav-item" data-page="market">
-                    <span class="nav-icon">🛒</span>
-                    <span class="nav-label">Dijital Market</span>
-                </div>
-                <div class="nav-item" data-page="mental">
-                    <span class="nav-icon">🧠</span>
-                    <span class="nav-label">Mental Sağlık</span>
-                </div>
-                <div class="nav-item" data-page="leadership">
-                    <span class="nav-icon">🧭</span>
-                    <span class="nav-label">Liderlik</span>
-                </div>
-                <div class="nav-item" data-page="life">
-                    <span class="nav-icon">🎯</span>
-                    <span class="nav-label">Yaşam Tasarımı</span>
-                </div>
-                <div class="nav-item" data-page="natural">
-                    <span class="nav-icon">🌿</span>
-                    <span class="nav-label">Doğal Ürünler</span>
-                </div>
-                <div class="nav-item" data-page="admin">
-                    <span class="nav-icon">🔐</span>
-                    <span class="nav-label">Yönetim</span>
-                </div>
+                <div class="nav-item active" data-page="profile"> <span class="nav-icon">👤</span> <span class="nav-label">Profil & Abonelik</span> </div>
+                <div class="nav-item" data-page="ai"> <span class="nav-icon">✨</span> <span class="nav-label">AI İçerik & E-Kitap</span> </div>
+                <div class="nav-item" data-page="fire"> <span class="nav-icon">🔥</span> <span class="nav-label">FIRE Hesaplama</span> </div>
+                <div class="nav-item" data-page="health"> <span class="nav-icon">💰</span> <span class="nav-label">Finansal Sağlık</span> </div>
+                <div class="nav-item" data-page="portfolio"> <span class="nav-icon">📈</span> <span class="nav-label">Portföy Yönetimi</span> </div>
+                <div class="nav-item" data-page="cfo"> <span class="nav-icon">📊</span> <span class="nav-label">CFO Danışmanlığı</span> </div>
+                <div class="nav-item" data-page="market"> <span class="nav-icon">🛒</span> <span class="nav-label">Dijital Market</span> </div>
+                <div class="nav-item" data-page="mental"> <span class="nav-icon">🧠</span> <span class="nav-label">Mental & Beslenme</span> </div>
+                <div class="nav-item" data-page="leadership"> <span class="nav-icon">🧭</span> <span class="nav-label">Liderlik</span> </div>
+                <div class="nav-item" data-page="life"> <span class="nav-icon">🎯</span> <span class="nav-label">Yaşam Tasarımı</span> </div>
+                <div class="nav-item" data-page="natural"> <span class="nav-icon">🌿</span> <span class="nav-label">Doğal Ürünler</span> </div>
+                <div class="nav-item" data-page="fire90"> <span class="nav-icon">⏳</span> <span class="nav-label">90 Günlük FIRE</span> </div>
+                <div class="nav-item" data-page="admin"> <span class="nav-icon">🔐</span> <span class="nav-label">Yönetim</span> </div>
             </div>
             <div style="padding: 20px; border-top: 1px solid rgba(212,175,55,0.2); margin-top: 20px;">
                 <a href="https://wa.me/905418660202" target="_blank" class="whatsapp-badge" style="display: flex; justify-content: center;">
@@ -474,467 +489,307 @@
                 </div>
             </div>
             
+            <!-- TÜM SAYFALAR -->
             <div id="page-profile" class="page-content">
-                <div class="card">
-                    <h3>👤 Kullanıcı & Abonelik</h3>
-                    <input type="text" id="userName" placeholder="Adınız Soyadınız">
-                    <input type="email" id="userEmail" placeholder="E-posta Adresiniz">
-                    <select id="userPlan">
-                        <option value="Free">Standart (Ücretsiz)</option>
-                        <option value="Pro">Pro Plan - 1.499₺/yıl</option>
-                        <option value="Premium">Premium Plan - 2.499₺/yıl</option>
-                        <option value="VIP">Elite VIP - 4.999₺/yıl</option>
-                    </select>
-                    <button onclick="saveProfile()">Kaydet & Abone Ol</button>
-                    <div id="profileStatus" class="analysis-box">Profil oluşturulmadı.</div>
-                    
-                    <div style="margin-top: 16px;">
-                        <h4>📋 Paket İçerikleri</h4>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 10px; margin-top: 10px;">
-                            <div style="background:#0f2a4a; border-radius:12px; padding:10px; border:1px solid #94a3b8;">
-                                <div class="flex-between"><strong>🆓 Standart</strong><span>0₺</span></div>
-                                <ul class="plan-features" style="font-size:0.65rem; margin-top:6px;"><li>Temel FIRE</li><li>Sağlık Skoru</li><li>1 Portföy</li></ul>
-                            </div>
-                            <div style="background:#0f2a4a; border-radius:12px; padding:10px; border:1px solid #d4af37;">
-                                <div class="flex-between"><strong>🚀 Pro</strong><span>1.499₺</span></div>
-                                <ul class="plan-features" style="font-size:0.65rem; margin-top:6px;"><li>Sınırsız FIRE</li><li>4 FIRE Türü</li><li>AI Öneriler</li></ul>
-                            </div>
-                            <div style="background:#0f2a4a; border-radius:12px; padding:10px; border:1px solid #8b5cf6;">
-                                <div class="flex-between"><strong>💎 Premium</strong><span>2.499₺</span></div>
-                                <ul class="plan-features" style="font-size:0.65rem; margin-top:6px;"><li>Tüm Pro</li><li>Gemini AI</li><li>WhatsApp Destek</li></ul>
-                            </div>
-                            <div style="background:#0f2a4a; border-radius:12px; padding:10px; border:1px solid #1a1a2e;">
-                                <div class="flex-between"><strong>👑 VIP</strong><span>4.999₺</span></div>
-                                <ul class="plan-features" style="font-size:0.65rem; margin-top:6px;"><li>Birebir Danışmanlık</li><li>Özel Portföy</li><li>Kişisel Strateji</li></ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div class="card"><h3>👤 Kullanıcı & Abonelik</h3>
+                <input type="text" id="userName" placeholder="Adınız Soyadınız"><input type="email" id="userEmail" placeholder="E-posta">
+                <select id="userPlan"><option value="Free">Standart (Ücretsiz)</option><option value="Pro">Pro Plan - 1.499₺/yıl</option><option value="Premium">Premium Plan - 2.499₺/yıl</option><option value="VIP">Elite VIP - 4.999₺/yıl</option></select>
+                <button onclick="saveProfile()">Kaydet & Abone Ol</button>
+                <div id="profileStatus" class="analysis-box">Profil oluşturulmadı.</div></div>
             </div>
             
             <div id="page-ai" class="page-content hidden">
-                <div class="card">
-                    <h3>✨ Gemini AI İçerik & E-Kitap Üretimi</h3>
-                    <div class="api-box">
-                        <p>🔑 <strong>Gemini API Anahtarı</strong> <a href="https://aistudio.google.com/apikey" target="_blank" style="color:#d4af37;">(ücretsiz al)</a></p>
-                        <input type="password" id="geminiApiKeyInput" placeholder="AIzaSy...">
-                        <button onclick="saveGeminiKey()">💾 Anahtarı Kaydet</button>
-                    </div>
-                    <select id="aiStyle">
-                        <option value="profesyonel">🎯 Profesyonel / Kurumsal</option>
-                        <option value="samimi">😊 Samimi / Günlük</option>
-                        <option value="akademik">📚 Akademik / Eğitici</option>
-                        <option value="motivasyonel">🔥 Motivasyonel</option>
-                    </select>
-                    <input type="text" id="aiTopic" placeholder="Konu: Finansal Özgürlük Nedir?">
-                    <textarea id="aiNotes" rows="2" placeholder="Ek notlar (isteğe bağlı)..."></textarea>
-                    <button onclick="generateWithGemini()">✨ İçerik Üret</button>
-                    <div id="aiOutput" class="analysis-box">⏳ İçerik üretmek için konu yazın...</div>
-                    
-                    <div class="flex-between" style="margin-top:12px;">
-                        <button onclick="copyAiContent()" class="inline-btn">📋 Kopyala</button>
-                        <button onclick="downloadAiTXT()" class="inline-btn">💾 TXT</button>
-                        <button onclick="downloadAiPDF()" class="inline-btn btn-danger">📄 PDF</button>
-                        <button onclick="sendWhatsAppContent()" class="inline-btn" style="background:#25D366;">📲 WhatsApp</button>
-                    </div>
-                    
-                    <div style="margin-top:16px; border-top:1px solid #d4af37; padding-top:12px;">
-                        <h4>📘 E-Kitap Oluştur</h4>
-                        <div id="ebookChapters" style="max-height:150px; overflow-y:auto; margin:8px 0;"></div>
-                        <div class="flex-between">
-                            <button onclick="addChapter()" class="inline-btn">➕ Bölüm Ekle</button>
-                            <button onclick="generateAllChapters()" class="inline-btn" style="background:#8b5cf6;">🤖 Tümünü Üret</button>
-                            <button onclick="downloadEbookPDF()" class="inline-btn btn-danger">📘 E-Kitap PDF</button>
-                        </div>
-                    </div>
-                </div>
+                <div class="card"><h3>✨ Gemini AI İçerik & E-Kitap</h3>
+                <div class="api-box"><input type="password" id="geminiApiKeyInput" placeholder="AIzaSy..."><button onclick="saveGeminiKey()">💾 Kaydet</button></div>
+                <select id="aiStyle"><option value="profesyonel">Profesyonel</option><option value="samimi">Samimi</option></select>
+                <input id="aiTopic" placeholder="Konu"><textarea id="aiNotes" rows="2" placeholder="Notlar"></textarea>
+                <button onclick="generateWithGemini()">✨ Üret</button><div id="aiOutput" class="analysis-box"></div>
+                <div class="flex-between"><button onclick="copyAiContent()" class="inline-btn">Kopyala</button><button onclick="downloadAiTXT()" class="inline-btn">TXT</button><button onclick="downloadAiPDF()" class="inline-btn btn-danger">PDF</button><button onclick="sendWhatsAppContent()" class="inline-btn" style="background:#25D366;">WhatsApp</button></div>
+                <div style="margin-top:16px;"><h4>📘 E-Kitap</h4><div id="ebookChapters"></div><button onclick="addChapter()" class="inline-btn">➕ Bölüm</button><button onclick="generateAllChapters()" class="inline-btn">🤖 Tümünü Üret</button><button onclick="downloadEbookPDF()" class="inline-btn btn-danger">PDF İndir</button></div></div>
             </div>
             
             <div id="page-fire" class="page-content hidden">
-                <div class="card">
-                    <h3>🔥 FIRE Hesaplama</h3>
-                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:10px;">
-                        <div><label>Aylık Gelir</label><input type="number" id="fire_income" value="45000"></div>
-                        <div><label>Aylık Gider</label><input type="number" id="fire_expense" value="25000"></div>
-                        <div><label>Pasif Gelir</label><input type="number" id="fire_passive" value="5000"></div>
-                        <div><label>Yaş</label><input type="number" id="fire_age" value="32"></div>
-                        <div><label>Birikim</label><input type="number" id="fire_capital" value="450000"></div>
-                        <div><label>Toplam Borç</label><input type="number" id="fire_debt" value="80000"></div>
-                        <div><label>Getiri %</label><input type="number" id="fire_return" value="9.5" step="0.5"></div>
-                        <div><label>Enflasyon %</label><input type="number" id="fire_inflation" value="6.0" step="0.5"></div>
-                    </div>
-                    <button onclick="calculateFIRE()">Hesapla</button>
-                    <div id="fireResult" class="analysis-box"></div>
-                    <button onclick="calculateAllFIRE()" style="margin-top:8px;">4 FIRE Türünü Hesapla</button>
-                    <div class="fire-types-grid">
-                        <div class="fire-type-card"><h4>Lean (25X)</h4><div id="leanTarget">-</div><div id="leanYears">-</div></div>
-                        <div class="fire-type-card"><h4>Fat (35X)</h4><div id="fatTarget">-</div><div id="fatYears">-</div></div>
-                        <div class="fire-type-card"><h4>Barista (20X)</h4><div id="baristaTarget">-</div><div id="baristaYears">-</div></div>
-                        <div class="fire-type-card"><h4>Coast (15X)</h4><div id="coastTarget">-</div><div id="coastYears">-</div></div>
-                    </div>
+                <div class="card"><h3>🔥 FIRE Hesaplama</h3>
+                <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px;">
+                    <input type="number" id="fire_income" placeholder="Gelir" value="45000"><input type="number" id="fire_expense" placeholder="Gider" value="25000">
+                    <input type="number" id="fire_passive" placeholder="Pasif Gelir" value="5000"><input type="number" id="fire_age" placeholder="Yaş" value="32">
+                    <input type="number" id="fire_capital" placeholder="Birikim" value="450000"><input type="number" id="fire_debt" placeholder="Borç" value="80000">
+                    <input type="number" id="fire_return" placeholder="Getiri %" value="9.5"><input type="number" id="fire_inflation" placeholder="Enflasyon %" value="6">
                 </div>
+                <button onclick="calculateFIRE()">Hesapla</button><div id="fireResult" class="analysis-box"></div>
+                <button onclick="calculateAllFIRE()">4 FIRE Türü</button>
+                <div class="fire-types-grid"><div class="fire-type-card"><h4>Lean</h4><div id="leanTarget">-</div></div><div class="fire-type-card"><h4>Fat</h4><div id="fatTarget">-</div></div><div class="fire-type-card"><h4>Barista</h4><div id="baristaTarget">-</div></div><div class="fire-type-card"><h4>Coast</h4><div id="coastTarget">-</div></div></div></div>
             </div>
             
             <div id="page-health" class="page-content hidden">
-                <div class="card">
-                    <h3>💰 Finansal Sağlık Durumu</h3>
-                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:10px;">
-                        <div><label>Borç</label><input type="number" id="debt" value="80000"></div>
-                        <div><label>Alacak</label><input type="number" id="receivables" value="25000"></div>
-                        <div><label>Acil Fon</label><input type="number" id="emergency" value="75000"></div>
-                        <div><label>Diğer Varlık</label><input type="number" id="otherAssets" value="150000"></div>
-                    </div>
-                    <button onclick="updateFinancialHealth()">Güncelle</button>
-                    <div id="netWorthDisplay" class="analysis-box">Net Servet: --</div>
-                    <div id="healthScore" class="analysis-box">Skor: --</div>
-                    <div id="healthAdvice" class="analysis-box">💡 --</div>
+                <div class="card"><h3>💰 Finansal Sağlık</h3>
+                <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px;">
+                    <input id="debt" placeholder="Borç" value="80000"><input id="receivables" placeholder="Alacak" value="25000">
+                    <input id="emergency" placeholder="Acil Fon" value="75000"><input id="otherAssets" placeholder="Diğer Varlık" value="150000">
+                </div>
+                <button onclick="updateFinancialHealth()">Güncelle</button>
+                <div id="netWorthDisplay" class="analysis-box"></div><div id="healthScore" class="analysis-box"></div>
                 </div>
             </div>
             
             <div id="page-portfolio" class="page-content hidden">
-                <div class="card">
-                    <h3>📈 Portföy Yönetimi</h3>
-                    <div class="flex-between"><span>Toplam: <strong id="portfolioTotal">0 ₺</strong></span><button onclick="refreshPrices()" class="inline-btn">🔄 Fiyatları Güncelle</button></div>
-                    <table id="portfolioTable" style="margin-top:10px;">
-                        <thead><tr><th>Varlık</th><th>Miktar</th><th>Fiyat</th><th>Toplam</th><th></th></tr></thead>
-                        <tbody id="portfolioBody"></tbody>
-                    </table>
-                    <canvas id="portfolioChart" width="200" height="200"></canvas>
-                    <div id="allocationPercent" class="analysis-box"></div>
-                    <button onclick="addPortfolioAsset()">➕ Varlık Ekle</button>
-                </div>
+                <div class="card"><h3>📈 Portföy Yönetimi</h3>
+                <div class="flex-between"><span>Toplam: <strong id="portfolioTotal">0 ₺</strong></span><button onclick="refreshPrices()" class="inline-btn">🔄 Fiyat Güncelle</button></div>
+                <table><thead><tr><th>Varlık</th><th>Miktar</th><th>Fiyat</th><th>Toplam</th><th></th></tr></thead><tbody id="portfolioBody"></tbody></table>
+                <canvas id="portfolioChart" width="200" height="200"></canvas><div id="allocationPercent" class="analysis-box"></div>
+                <button onclick="addPortfolioAsset()">➕ Varlık Ekle</button></div>
             </div>
             
             <div id="page-cfo" class="page-content hidden">
-                <div class="card">
-                    <h3>📊 CFO Danışmanlığı</h3>
-                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px,1fr)); gap:10px;">
-                        <div><label>Ciro</label><input type="number" id="cf_revenue" value="5000000"></div>
-                        <div><label>Kâr</label><input type="number" id="cf_profit" value="750000"></div>
-                        <div><label>Aktif</label><input type="number" id="cf_assets" value="3000000"></div>
-                        <div><label>Borç</label><input type="number" id="cf_liabilities" value="1200000"></div>
-                    </div>
-                    <button onclick="calculateCFO()">Analiz Yap</button>
-                    <div id="cfoResult" class="analysis-box"></div>
-                    <div id="cfoAdvice" class="analysis-box">🤖 --</div>
+                <div class="card"><h3>📊 CFO Danışmanlığı</h3>
+                <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px;">
+                    <input id="cf_revenue" placeholder="Ciro" value="5000000"><input id="cf_profit" placeholder="Kâr" value="750000">
+                    <input id="cf_assets" placeholder="Aktif" value="3000000"><input id="cf_liabilities" placeholder="Borç" value="1200000">
                 </div>
+                <button onclick="calculateCFO()">Analiz</button><div id="cfoResult" class="analysis-box"></div></div>
             </div>
             
             <div id="page-market" class="page-content hidden">
-                <div class="card">
-                    <h3>🛒 Dijital Market</h3>
-                    <div id="digitalMarketList"></div>
-                    <div style="margin-top:12px; padding:10px; background:rgba(7,21,46,0.5); border-radius:12px;">
-                        <input type="text" id="newMarketName" placeholder="Ürün Adı">
-                        <input type="number" id="newMarketPrice" placeholder="Fiyat">
-                        <select id="newMarketCat"><option value="dijital">Dijital</option><option value="egitim">Eğitim</option><option value="danismanlik">Danışmanlık</option></select>
-                        <button onclick="addMarketProduct()">➕ Ekle</button>
-                    </div>
-                    <button onclick="showCart()" style="margin-top:10px;">🛍️ Sepet (<span id="cartCount">0</span>)</button>
-                    <div id="cartModal" class="hidden" style="background:#0f2a4a; border:2px solid #d4af37; border-radius:16px; padding:12px; margin-top:10px;">
-                        <h4>Sepetim</h4>
-                        <div id="cartItems"></div>
-                        <p><strong>Toplam: <span id="cartTotal">0 ₺</span></strong></p>
-                        <button onclick="sendWhatsAppOrder()">WhatsApp Sipariş</button>
-                        <button onclick="closeCart()">Kapat</button>
-                    </div>
-                </div>
+                <div class="card"><h3>🛒 Dijital Market</h3><div id="digitalMarketList"></div>
+                <div style="margin-top:12px;"><input id="newMarketName" placeholder="Ürün Adı"><input id="newMarketPrice" type="number" placeholder="Fiyat"><select id="newMarketCat"><option value="dijital">Dijital</option><option value="egitim">Eğitim</option></select><button onclick="addMarketProduct()">Ekle</button></div>
+                <button onclick="showCart()">Sepet (<span id="cartCount">0</span>)</button>
+                <div id="cartModal" class="hidden" style="margin-top:12px; background:#0f2a4a; border:2px solid #d4af37; border-radius:16px; padding:12px;"><h4>Sepet</h4><div id="cartItems"></div><p>Toplam: <span id="cartTotal">0 ₺</span></p><button onclick="sendWhatsAppOrder()">Sipariş Ver</button><button onclick="closeCart()">Kapat</button></div></div>
             </div>
             
+            <!-- MENTAL SAĞLIK + BESLENME + ENERJİ + KİLO -->
             <div id="page-mental" class="page-content hidden">
                 <div class="card">
-                    <h3>🧠 Mental Sağlık Danışmanlığı</h3>
-                    <label>Stres Seviyesi (1-10)</label>
-                    <input type="range" id="mental_stress" min="1" max="10" value="5" oninput="document.getElementById('stressVal').innerText=this.value">
-                    <span id="stressVal">5</span>
-                    <label>Uyku Kalitesi (1-10)</label>
-                    <input type="range" id="mental_sleep" min="1" max="10" value="5" oninput="document.getElementById('sleepVal').innerText=this.value">
-                    <span id="sleepVal">5</span>
-                    <label>Motivasyon (1-10)</label>
-                    <input type="range" id="mental_motivation" min="1" max="10" value="5" oninput="document.getElementById('motivationVal').innerText=this.value">
-                    <span id="motivationVal">5</span>
-                    <button onclick="analyzeMentalHealth()" style="margin-top:10px;">Değerlendir</button>
-                    <div id="mentalHealthOut" class="analysis-box"></div>
+                    <h3>🧠 Mental Sağlık & Beslenme & Enerji Takibi</h3>
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:20px;">
+                        <div style="background:rgba(7,21,46,0.5); border-radius:16px; padding:15px;">
+                            <h4>😊 Mental Durum</h4>
+                            <label>Stres (1-10)</label><input type="range" id="mental_stress" min="1" max="10" value="5" oninput="updateMentalHealth()"><span id="stressVal">5</span>
+                            <label>Uyku (1-10)</label><input type="range" id="mental_sleep" min="1" max="10" value="5" oninput="updateMentalHealth()"><span id="sleepVal">5</span>
+                            <label>Motivasyon</label><input type="range" id="mental_motivation" min="1" max="10" value="5"><span id="motivationVal">5</span>
+                            <button onclick="analyzeMentalHealth()">Değerlendir</button>
+                            <div id="mentalHealthOut" class="analysis-box"></div>
+                        </div>
+                        <div style="background:rgba(7,21,46,0.5); border-radius:16px; padding:15px;">
+                            <h4>🥗 Beslenme</h4>
+                            <input type="number" id="calorie_intake" placeholder="Kalori" value="2200"><input type="number" id="calorie_goal" placeholder="Hedef" value="2000">
+                            <input type="number" id="water" placeholder="Su (L)" value="2.0"><button onclick="updateNutrition()">Analiz</button>
+                            <div id="nutritionOut" class="analysis-box"></div>
+                        </div>
+                        <div style="background:rgba(7,21,46,0.5); border-radius:16px; padding:15px;">
+                            <h4>⚡ Kilo & Enerji</h4>
+                            <input type="number" id="current_weight" placeholder="Kilo" value="75"><input type="number" id="height" placeholder="Boy cm" value="175">
+                            <input type="range" id="energy" min="1" max="10" value="6"><span id="energyShow">6</span>
+                            <button onclick="updateHealthMetrics()">Hesapla</button>
+                            <div id="healthMetricsOut" class="analysis-box"></div>
+                        </div>
+                    </div>
+                    <button onclick="generateWellnessReport()">🌟 Kapsamlı Sağlık Raporu</button><div id="wellnessReport" class="analysis-box"></div>
                 </div>
             </div>
             
             <div id="page-leadership" class="page-content hidden">
-                <div class="card">
-                    <h3>🧭 Liderlik & Yöneticilik Danışmanlığı</h3>
-                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px,1fr)); gap:10px;">
-                        <div><label>Ekip Büyüklüğü</label><input type="number" id="lead_teamSize" value="5"></div>
-                        <div><label>Tecrübe (yıl)</label><input type="number" id="lead_experience" value="8"></div>
-                        <div><label>Karar Stili</label><input type="range" id="lead_style" min="1" max="10" value="5" oninput="document.getElementById('styleVal').innerText=this.value"><span id="styleVal">5</span></div>
-                        <div><label>İletişim</label><input type="range" id="lead_communication" min="1" max="10" value="7" oninput="document.getElementById('commVal').innerText=this.value"><span id="commVal">7</span></div>
-                    </div>
-                    <button onclick="analyzeLeadership()">Rapor Al</button>
-                    <div id="leadershipOut" class="analysis-box"></div>
-                </div>
+                <div class="card"><h3>🧭 Liderlik Danışmanlığı</h3>
+                <button onclick="analyzeLeadership()">Rapor</button><div id="leadershipOut" class="analysis-box"></div></div>
             </div>
             
             <div id="page-life" class="page-content hidden">
-                <div class="card">
-                    <h3>🎯 Yaşam Tasarımı & Mentörlük</h3>
-                    <div id="wheelContainer"></div>
-                    <button onclick="analyzeLifeWheel()" style="margin-top:12px;">Analiz Et</button>
-                    <div id="lifeWheelOut" class="analysis-box"></div>
-                </div>
+                <div class="card"><h3>🎯 Yaşam Çarkı</h3><div id="wheelContainer"></div><button onclick="analyzeLifeWheel()">Analiz</button><div id="lifeWheelOut" class="analysis-box"></div></div>
             </div>
             
             <div id="page-natural" class="page-content hidden">
+                <div class="card"><h3>🌿 Doğal Ürünler</h3><div id="naturalProductsList"></div></div>
+            </div>
+            
+            <!-- 90 GÜNLÜK FIRE ÖZGÜRLÜK PLANI -->
+            <div id="page-fire90" class="page-content hidden">
                 <div class="card">
-                    <h3>🌿 Doğal Ürünler</h3>
-                    <div id="naturalProductsList"></div>
+                    <h3>⏳ 90 Günlük FIRE Özgürlük Planı</h3>
+                    <div class="flex-between"><span>İlerleme: <span id="dayCounter">0</span> / 90 Gün</span><button onclick="markDay()">✅ Bugünü İşaretle</button><button onclick="resetProgress()" class="btn-secondary">Sıfırla</button></div>
+                    <div class="progress-bar"><div class="progress-fill" id="daysProgress" style="width:0%"></div></div>
+                    <div id="dailyTask" class="phase-card">📌 Bugün: Gelir/gider kaydet + 1 finansal aksiyon</div>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="card"><h3>📈 Gelir Paneli</h3><input id="activeIncome" value="45000"><input id="passiveIncome" value="5000"><input id="extraIncome" value="0"><div id="totalIncomeDisplay" class="analysis-box"></div></div>
+                    <div class="card"><h3>💸 Gider Paneli</h3><input id="fixedExpense" value="18000"><input id="variableExpense" value="7000"><input id="wasteExpense" value="4000"><button onclick="optimizeExpenses()">Optimize Et</button><div id="totalExpenseDisplay" class="analysis-box"></div></div>
+                    <div class="card"><h3>🏦 Net Varlık</h3><input id="savings" value="450000"><input id="investments" value="300000"><input id="debtFire" value="80000"><div id="netWorthFire" class="analysis-box"></div><div id="fireGapDisplay" class="analysis-box"></div></div>
+                    <div class="card"><h3>📊 Tasarruf Oranı</h3><div id="savingsRateDisplay" style="font-size:1.5rem;color:#d4af37;">--%</div><div class="progress-bar"><div class="progress-fill" id="savingsRateBar" style="width:0%"></div></div><div id="investmentCapacity" class="analysis-box"></div></div>
+                </div>
+                
+                <div class="card">
+                    <h3>🧭 90 Günlük Strateji Haritası</h3>
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:16px;">
+                        <div class="phase-card"><h4 style="color:#60a5fa;">🔵 Faz 1 (Gün 1-30): Finansal Temizlik</h4><ul><li>✓ Gider analizi</li><li>✓ Minimum yaşam maliyeti: <span id="minLivingCost">--</span></li></ul></div>
+                        <div class="phase-card"><h4 style="color:#fbbf24;">🟡 Faz 2 (Gün 31-60): Gelir Artırma</h4><ul><li>✓ Hedef Gelir: <span id="targetIncomePhase2">--</span></li></ul></div>
+                        <div class="phase-card"><h4 style="color:#ef4444;">🔴 Faz 3 (Gün 61-90): Yatırım & Ölçekleme</h4><ul><li>✓ Pasif Hedef: <span id="passiveTargetPhase3">--</span></li></ul></div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>📊 Senaryo Analizi (90 Gün Sonu)</h3>
+                    <table id="scenarioTable"><thead><tr><th>Senaryo</th><th>Net Varlık</th><th>Tasarruf Oranı</th><th>Yatırım Kapasitesi</th></tr></thead><tbody id="scenarioBody"></tbody></table>
+                    <div class="flex-between" style="margin-top:12px;"><button onclick="runScenario('conservative')">Conservative</button><button onclick="runScenario('base')">Base Case</button><button onclick="runScenario('aggressive')">Aggressive</button></div>
+                </div>
+                
+                <div class="card">
+                    <h3>✅ Günlük Checklist & Davranış Sistemi</h3>
+                    <div><label><input type="checkbox" id="ch1" onchange="saveChecklist()"> Gelir/gider kaydet</label></div>
+                    <div><label><input type="checkbox" id="ch2" onchange="saveChecklist()"> 1 finansal aksiyon</label></div>
+                    <div><label><input type="checkbox" id="ch3" onchange="saveChecklist()"> 1 gelir artırma hareketi</label></div>
+                    <div><label><input type="checkbox" id="ch4" onchange="saveChecklist()"> 15dk finansal okuryazarlık</label></div>
+                    <div id="checklistStatus" class="analysis-box"></div>
+                    <button onclick="generateWeeklyReport()" style="margin-top:10px;">📋 Haftalık Rapor Oluştur</button>
+                    <div id="weeklyReport" class="analysis-box"></div>
                 </div>
             </div>
             
             <div id="page-admin" class="page-content hidden">
-                <div class="card">
-                    <h3>🔐 Yönetim Paneli</h3>
-                    <div class="flex-between">
-                        <input type="password" id="adminPass" placeholder="Şifre: admin2026" style="flex:1;">
-                        <button onclick="accessAdmin()">Giriş</button>
-                    </div>
-                    <div id="adminPanel" class="hidden" style="margin-top:16px;">
-                        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:16px;">
-                            <div>
-                                <h4>📦 Market Yönetimi</h4>
-                                <div id="adminMarketList"></div>
-                                <input id="adminMarketName" placeholder="Ürün Adı">
-                                <input id="adminMarketPrice" type="number" placeholder="Fiyat">
-                                <select id="adminMarketCat"><option value="dijital">Dijital</option><option value="egitim">Eğitim</option><option value="danismanlik">Danışmanlık</option></select>
-                                <button onclick="adminAddMarket()">➕ Ekle</button>
-                            </div>
-                            <div>
-                                <h4>📈 Portföy Yönetimi</h4>
-                                <div id="adminPortfolioList"></div>
-                                <input id="adminAssetName" placeholder="Varlık Adı">
-                                <input id="adminAssetQty" type="number" placeholder="Miktar">
-                                <input id="adminAssetPrice" type="number" placeholder="Fiyat">
-                                <input id="adminAssetClass" placeholder="Sınıf">
-                                <button onclick="adminAddPortfolio()">➕ Ekle</button>
-                            </div>
-                        </div>
-                        <button onclick="clearAllData()" class="btn-danger" style="margin-top:16px;">Tüm Logları Temizle</button>
-                    </div>
-                </div>
+                <div class="card"><h3>🔐 Yönetim</h3>
+                <div class="flex-between"><input type="password" id="adminPass" placeholder="Şifre: admin2026"><button onclick="accessAdmin()">Giriş</button></div>
+                <div id="adminPanel" class="hidden"><div id="adminMarketList"></div><div id="adminPortfolioList"></div><button onclick="clearAllData()" class="btn-danger">Verileri Sıfırla</button></div></div>
             </div>
         </div>
     </div>
     
+    <footer>
+        <div>🌐 <a href="https://anadolunetwork.tr" target="_blank">Anadolu Network</a> | <a href="https://www.odakdijital.com.tr" target="_blank">Odak Dijital</a> | <a href="https://www.ortakmarkets.com.tr" target="_blank">Ortak Markets</a></div>
+        <div>📲 <a href="https://wa.me/905418660202">0541 866 02 02</a> | 📧 orhanboyraz0216@gmail.com | Nilüfer/BURSA | Orhan BOYRAZ</div>
+        <div style="font-size:0.6rem;">© 2025 Anadolu Network - Eğitim ve Bilgi Amaçlıdır, Yatırım Tavsiyesi Değildir. Tüm modüller aktiftir.</div>
+    </footer>
+    
     <script>
-        // ============ STORAGE HELPERS ============
-        const S = {
-            get(k, d) { try { const i = localStorage.getItem('an_'+k); return i ? JSON.parse(i) : d; } catch(e) { return d; } },
-            set(k, v) { localStorage.setItem('an_'+k, JSON.stringify(v)); }
-        };
+        // STORAGE
+        const S = { get(k,d) { try { return JSON.parse(localStorage.getItem('an_'+k)||JSON.stringify(d)); } catch(e){ return d; } }, set(k,v) { localStorage.setItem('an_'+k, JSON.stringify(v)); } };
+        if (!S.get('portfolio')) S.set('portfolio', [{ id:1, name:'BIST 100', qty:1250, price:42.5, cls:'Hisse' },{ id:2, name:'Gram Altın', qty:45, price:2450, cls:'Altın' },{ id:3, name:'Bitcoin', qty:0.085, price:1850000, cls:'Kripto' }]);
+        if (!S.get('marketProducts')) S.set('marketProducts', [{ id:1, name:'FIRE E-Kitap', price:79, cat:'dijital', icon:'📘' },{ id:2, name:'Danışmanlık', price:1500, cat:'danismanlik', icon:'🎯' }]);
+        if (!S.get('naturalProducts')) S.set('naturalProducts', [{ id:1, name:'Doğal Zeytinyağı', price:299, icon:'🫒' },{ id:2, name:'Organik Bal', price:189, icon:'🍯' }]);
         
-        if (!S.get('portfolio')) S.set('portfolio', [
-            { id:1, name:'BIST 100 Hisse', qty:1250, price:42.5, cls:'Hisse' },
-            { id:2, name:'Gram Altın', qty:45, price:2450, cls:'Altın' },
-            { id:3, name:'Fon/ETF', qty:850, price:50000, cls:'Fon' },
-            { id:4, name:'Bitcoin', qty:0.085, price:1850000, cls:'Kripto' },
-            { id:5, name:'Nakit TL', qty:225000, price:1, cls:'Nakit' }
-        ]);
-        if (!S.get('marketProducts')) S.set('marketProducts', [
-            { id:1, name:'Bütçe Excel Şablonu', price:49, cat:'dijital', icon:'📊' },
-            { id:2, name:'FIRE E-Kitap', price:79, cat:'dijital', icon:'📘' },
-            { id:3, name:'FIRE Danışmanlığı', price:1500, cat:'danismanlik', icon:'🎯' },
-            { id:4, name:'Yatırım Danışmanlığı', price:2500, cat:'danismanlik', icon:'💼' }
-        ]);
-        if (!S.get('naturalProducts')) S.set('naturalProducts', [
-            { id:1, name:'Doğal Zeytinyağı 1L', price:299, icon:'🫒' },
-            { id:2, name:'Organik Bal 500g', price:189, icon:'🍯' }
-        ]);
-        
-        let portfolio = S.get('portfolio');
-        let marketProducts = S.get('marketProducts');
-        let naturalProducts = S.get('naturalProducts');
-        let cart = [];
-        let chartInstance = null;
-        let geminiApiKey = localStorage.getItem("gemini_api_key") || "";
-        let lastAiContent = "";
-        let ebookChapters = [];
+        let portfolio = S.get('portfolio'), marketProducts = S.get('marketProducts'), naturalProducts = S.get('naturalProducts'), cart = [], chartInstance = null, geminiApiKey = localStorage.getItem("gemini_api_key") || "", lastAiContent = "", ebookChapters = [];
+        let currentDay = parseInt(localStorage.getItem("fire_day") || "0");
+        let fireData = { activeIncome:45000, passiveIncome:5000, extraIncome:0, fixedExpense:18000, variableExpense:7000, wasteExpense:4000, savings:450000, investments:300000, debt:80000 };
         
         function fmt(n) { return new Intl.NumberFormat('tr-TR', { style:'currency', currency:'TRY', minimumFractionDigits:0 }).format(n); }
         function save() { S.set('portfolio',portfolio); S.set('marketProducts',marketProducts); S.set('naturalProducts',naturalProducts); }
         
-        // ============ PAGE NAVIGATION ============
-        function showPage(pageId) {
-            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
-            document.getElementById(`page-${pageId}`).classList.remove('hidden');
-            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-            document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
-            
-            const titles = {
-                profile: 'Profil & Abonelik', ai: 'AI İçerik & E-Kitap', fire: 'FIRE Hesaplama',
-                health: 'Finansal Sağlık', portfolio: 'Portföy Yönetimi', cfo: 'CFO Danışmanlığı',
-                market: 'Dijital Market', mental: 'Mental Sağlık', leadership: 'Liderlik',
-                life: 'Yaşam Tasarımı', natural: 'Doğal Ürünler', admin: 'Yönetim Paneli'
-            };
-            document.getElementById('activePageTitle').innerText = titles[pageId] || pageId;
-            if (pageId === 'portfolio') renderPortfolio();
-            if (pageId === 'market') renderMarket();
-            if (pageId === 'natural') renderNatural();
-            if (pageId === 'life') renderWheel();
-        }
+        // NAVIGATION
+        function showPage(pageId) { document.querySelectorAll('.page-content').forEach(p=>p.classList.add('hidden')); document.getElementById(`page-${pageId}`).classList.remove('hidden'); document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); document.querySelector(`[data-page="${pageId}"]`).classList.add('active'); const titles={profile:'Profil',ai:'AI İçerik',fire:'FIRE',health:'Finansal Sağlık',portfolio:'Portföy',cfo:'CFO',market:'Market',mental:'Mental & Beslenme',leadership:'Liderlik',life:'Yaşam',natural:'Doğal Ürünler',fire90:'90 Günlük FIRE',admin:'Yönetim'}; document.getElementById('activePageTitle').innerText=titles[pageId]; if(pageId==='portfolio') renderPortfolio(); if(pageId==='market') renderMarket(); if(pageId==='natural') renderNatural(); if(pageId==='life') renderWheel(); if(pageId==='fire90') updateFire90Dashboard(); }
+        document.querySelectorAll('.nav-item').forEach(nav=>nav.addEventListener('click',()=>showPage(nav.dataset.page)));
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
         
-        document.querySelectorAll('.nav-item').forEach(nav => {
-            nav.addEventListener('click', () => showPage(nav.dataset.page));
-        });
-        
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('open');
-        }
-        
-        // ============ GEMINI ============
-        function saveGeminiKey() {
-            geminiApiKey = document.getElementById("geminiApiKeyInput").value.trim();
-            localStorage.setItem("gemini_api_key", geminiApiKey);
-            alert(geminiApiKey ? "✅ API anahtarı kaydedildi!" : "⚠️ Anahtar silindi!");
-        }
-        
-        async function callGemini(prompt) {
-            if(!geminiApiKey) return null;
-            try {
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`, {
-                    method:"POST", headers:{"Content-Type":"application/json"},
-                    body:JSON.stringify({ contents:[{parts:[{text:prompt}]}], generationConfig:{ temperature:0.9, maxOutputTokens:8192 } })
-                });
-                const data = await res.json();
-                if(data.error) throw new Error(data.error.message);
-                return data.candidates[0].content.parts[0].text;
-            } catch(e) { return null; }
-        }
-        
-        async function generateWithGemini() {
-            const topic = document.getElementById("aiTopic").value.trim();
-            const style = document.getElementById("aiStyle").value;
-            if(!topic) return alert("Lütfen bir konu girin!");
-            document.getElementById("aiOutput").innerHTML = "<i>⏳ Gemini AI içerik üretiyor...</i>";
-            const styleMap = { profesyonel:"profesyonel", samimi:"samimi", akademik:"akademik", motivasyonel:"motivasyonel" };
-            const result = await callGemini(`Konu: ${topic}. Stil: ${styleMap[style]}. Türkçe detaylı içerik üret.`);
-            if(result) { lastAiContent = result; document.getElementById("aiOutput").innerHTML = result.replace(/\n/g,'<br>'); }
-            else document.getElementById("aiOutput").innerHTML = "❌ API hatası. API anahtarınızı kontrol edin.";
-        }
-        
-        function copyAiContent() { if(lastAiContent) { navigator.clipboard.writeText(lastAiContent); alert("✅ Kopyalandı!"); } else alert("Önce içerik üretin!"); }
-        function downloadAiTXT() { if(lastAiContent) { const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([lastAiContent])); a.download="icerik.txt"; a.click(); } }
+        // GEMINI
+        function saveGeminiKey() { geminiApiKey = document.getElementById("geminiApiKeyInput").value.trim(); localStorage.setItem("gemini_api_key", geminiApiKey); alert(geminiApiKey?"✅ Kaydedildi":"❌ Silindi"); }
+        async function callGemini(prompt) { if(!geminiApiKey) return null; try { const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.9,maxOutputTokens:2000}})}); const data=await res.json(); if(data.error) throw new Error(data.error.message); return data.candidates[0].content.parts[0].text; } catch(e){ return null; } }
+        async function generateWithGemini() { const topic=document.getElementById("aiTopic").value; if(!topic) return alert("Konu girin"); document.getElementById("aiOutput").innerHTML="⏳ Üretiliyor..."; const res=await callGemini(`${topic} konusunda Türkçe detaylı içerik yaz.`); if(res){ lastAiContent=res; document.getElementById("aiOutput").innerHTML=res.replace(/\n/g,'<br>'); } else document.getElementById("aiOutput").innerHTML="API hatası"; }
+        function copyAiContent() { if(lastAiContent){ navigator.clipboard.writeText(lastAiContent); alert("Kopyalandı"); } }
+        function downloadAiTXT() { if(lastAiContent){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([lastAiContent])); a.download="icerik.txt"; a.click(); } }
         function downloadAiPDF() { if(!lastAiContent) return; const {jsPDF}=window.jspdf; const d=new jsPDF(); d.text(lastAiContent.substring(0,500),20,20); d.save("icerik.pdf"); }
         function sendWhatsAppContent() { if(lastAiContent) window.open(`https://wa.me/905418660202?text=${encodeURIComponent(lastAiContent.substring(0,500))}`); }
         
-        // ============ E-KİTAP ============
-        function addChapter() { const title = prompt("Bölüm başlığı:"); if(title) { ebookChapters.push({title, content:''}); renderEbookChapters(); } }
-        function renderEbookChapters() { document.getElementById("ebookChapters").innerHTML = ebookChapters.map((ch,i) => `<div class="chapter-item"><span>📘 Bölüm ${i+1}: ${ch.title}</span><button onclick="generateChapter(${i})" class="inline-btn">🤖 Üret</button><button onclick="ebookChapters.splice(${i},1);renderEbookChapters();" class="inline-btn btn-danger">🗑️</button></div>`).join('') || '<p>Henüz bölüm yok</p>'; }
-        async function generateChapter(i) { const result = await callGemini(`${ebookChapters[i].title} konusunda detaylı Türkçe bölüm yaz.`); if(result) ebookChapters[i].content = result; renderEbookChapters(); }
-        async function generateAllChapters() { for(let i=0;i<ebookChapters.length;i++) if(!ebookChapters[i].content) await generateChapter(i); alert("✅ Tüm bölümler üretildi!"); }
-        function downloadEbookPDF() { if(!ebookChapters.length) return alert("Bölüm ekleyin!"); const {jsPDF}=window.jspdf; const d=new jsPDF(); d.text("E-Kitap",20,20); let y=30; ebookChapters.forEach((ch,i)=>{ d.text(`Bölüm ${i+1}: ${ch.title}`,20,y); y+=10; const lines=d.splitTextToSize(ch.content||'',170); lines.forEach(l=>{ if(y>280){ d.addPage(); y=20; } d.text(l,20,y); y+=5; }); y+=10; }); d.save("ekitap.pdf"); alert("PDF oluşturuldu!"); }
+        // E-KİTAP
+        function addChapter() { const title=prompt("Bölüm başlığı:"); if(title) ebookChapters.push({title,content:''}); renderEbookChapters(); }
+        function renderEbookChapters() { document.getElementById("ebookChapters").innerHTML=ebookChapters.map((ch,i)=>`<div class="chapter-item"><span>📘 ${ch.title}</span><button onclick="generateChapter(${i})" class="inline-btn">Üret</button><button onclick="ebookChapters.splice(${i},1);renderEbookChapters();" class="inline-btn btn-danger">Sil</button></div>`).join('')||'Bölüm yok'; }
+        async function generateChapter(i) { const res=await callGemini(`${ebookChapters[i].title} konusunda detaylı bölüm yaz.`); if(res) ebookChapters[i].content=res; renderEbookChapters(); }
+        async function generateAllChapters() { for(let i=0;i<ebookChapters.length;i++) if(!ebookChapters[i].content) await generateChapter(i); alert("Üretildi"); }
+        function downloadEbookPDF() { if(!ebookChapters.length) return; const {jsPDF}=window.jspdf; const d=new jsPDF(); d.text("E-Kitap",20,20); let y=30; ebookChapters.forEach((ch,i)=>{ d.text(`Bolum ${i+1}: ${ch.title}`,20,y); y+=10; const lines=d.splitTextToSize(ch.content||'',170); lines.forEach(l=>{ if(y>280){ d.addPage(); y=20; } d.text(l,20,y); y+=5; }); y+=10; }); d.save("ekitap.pdf"); alert("PDF hazır"); }
         
-        // ============ PROFİL ============
-        function saveProfile() {
-            let name = document.getElementById("userName").value;
-            let plan = document.getElementById("userPlan").value;
-            if(!name) return alert("Adınızı girin!");
-            document.getElementById("profileStatus").innerHTML = `<span class="sub-badge ${plan}">${plan}</span> 👤 ${name}`;
-            document.getElementById("userNameDisplay").innerText = name;
-            document.getElementById("userPlanBadge").innerText = plan;
-            document.getElementById("userPlanBadge").className = `sub-badge ${plan}`;
-        }
+        // PROFİL
+        function saveProfile() { let name=document.getElementById("userName").value, plan=document.getElementById("userPlan").value; if(!name) return; document.getElementById("profileStatus").innerHTML=`<span class="sub-badge ${plan}">${plan}</span> ${name}`; document.getElementById("userNameDisplay").innerText=name; document.getElementById("userPlanBadge").innerText=plan; document.getElementById("userPlanBadge").className=`sub-badge ${plan}`; }
         
-        // ============ FIRE ============
-        function calculateFIRE() {
-            let inc=+document.getElementById("fire_income").value, exp=+document.getElementById("fire_expense").value;
-            let pas=+document.getElementById("fire_passive").value, age=+document.getElementById("fire_age").value;
-            let cap=+document.getElementById("fire_capital").value, debt=+document.getElementById("fire_debt").value||0;
-            let net=cap-debt, ms=inc-exp, ann=Math.max(0,exp*12-pas*12), target=ann*25;
-            document.getElementById("fireResult").innerHTML = `🎯 Hedef: ${fmt(target)}\n💰 Net Birikim: ${fmt(net)}\n📆 Hedef Yaş: ${age+Math.max(0,Math.ceil((target-net)/(ms*12)))}`;
-            window.lastFIRE = {target,net,age};
-        }
-        function calculateAllFIRE() {
-            calculateFIRE();
-            let exp=+document.getElementById("fire_expense").value, pas=+document.getElementById("fire_passive").value;
-            let ann=Math.max(0,exp*12-pas*12);
-            document.getElementById("leanTarget").innerHTML=fmt(ann*25); document.getElementById("fatTarget").innerHTML=fmt(ann*35);
-            document.getElementById("baristaTarget").innerHTML=fmt(ann*20); document.getElementById("coastTarget").innerHTML=fmt(ann*15);
-        }
+        // FIRE
+        function calculateFIRE() { let inc=+document.getElementById("fire_income").value, exp=+document.getElementById("fire_expense").value, cap=+document.getElementById("fire_capital").value, debt=+document.getElementById("fire_debt").value||0, net=cap-debt, ms=inc-exp, target=(exp*12)*25; document.getElementById("fireResult").innerHTML=`Hedef: ${fmt(target)}\nNet: ${fmt(net)}\n${net>=target?"HEDEFE ULAŞTINIZ!":(ms>0?`Tahmini süre: ${Math.ceil((target-net)/(ms*12))} yıl`:"Harcamalarınızı azaltın")}`; }
+        function calculateAllFIRE() { let exp=+document.getElementById("fire_expense").value; let ann=exp*12; document.getElementById("leanTarget").innerHTML=fmt(ann*25); document.getElementById("fatTarget").innerHTML=fmt(ann*35); document.getElementById("baristaTarget").innerHTML=fmt(ann*20); document.getElementById("coastTarget").innerHTML=fmt(ann*15); }
         
-        // ============ FİNANSAL SAĞLIK ============
-        function updateFinancialHealth() {
-            let debt=+document.getElementById("debt").value, rec=+document.getElementById("receivables").value;
-            let em=+document.getElementById("emergency").value, oth=+document.getElementById("otherAssets").value;
-            let pt=portfolio.reduce((s,a)=>s+a.qty*a.price,0);
-            let nw=pt+rec+em+oth-debt;
-            document.getElementById("netWorthDisplay").innerHTML=`Net Servet: ${fmt(nw)}`;
-            document.getElementById("healthScore").innerHTML=`Sağlık Skoru: ${nw>1000000?'Yüksek':nw>200000?'Orta':'Düşük'}`;
-        }
+        // FİNANS
+        function updateFinancialHealth() { let debt=+document.getElementById("debt").value, rec=+document.getElementById("receivables").value, em=+document.getElementById("emergency").value, oth=+document.getElementById("otherAssets").value, pt=portfolio.reduce((s,a)=>s+a.qty*a.price,0); let nw=pt+rec+em+oth-debt; document.getElementById("netWorthDisplay").innerHTML=`Net Servet: ${fmt(nw)}`; document.getElementById("healthScore").innerHTML=`Sağlık: ${nw>1000000?"Mükemmel":nw>200000?"İyi":"Geliştirilmeli"}`; }
         
-        // ============ PORTFÖY ============
+        // PORTFÖY
         function getPortfolioTotal() { return portfolio.reduce((s,a)=>s+a.qty*a.price,0); }
-        function renderPortfolio() {
-            let t=0, h='';
-            portfolio.forEach(a=>{ let v=a.qty*a.price; t+=v; h+=`<tr><td>${a.name}</td><td>${a.qty}</td><td>₺${a.price.toFixed(2)}</td><td>₺${v.toFixed(0)}</td><td><button onclick="delPortfolio(${a.id})" class="inline-btn btn-danger">🗑️</button></td></tr>`; });
-            document.getElementById("portfolioBody").innerHTML=h;
-            document.getElementById("portfolioTotal").innerText=fmt(t);
-            updateChart();
-        }
-        function updateChart() {
-            let cm=new Map();
-            portfolio.forEach(a=>{ cm.set(a.cls,(cm.get(a.cls)||0)+a.qty*a.price); });
-            if(chartInstance) chartInstance.destroy();
-            let ctx=document.getElementById("portfolioChart").getContext("2d");
-            chartInstance=new Chart(ctx,{type:'doughnut',data:{labels:[...cm.keys()],datasets:[{data:[...cm.values()],backgroundColor:['#4ade80','#fbbf24','#60a5fa','#f7931a','#a78bfa']}]}});
-            document.getElementById("allocationPercent").innerHTML=[...cm].map(([c,v])=>`${c}: ${((v/getPortfolioTotal())*100).toFixed(1)}%`).join(' | ');
-        }
-        function addPortfolioAsset() { let n=prompt("Varlık:"), q=+prompt("Miktar:"), p=+prompt("Fiyat:"), c=prompt("Sınıf:"); if(n&&q&&p&&c){ portfolio.push({id:Date.now(),name:n,qty:q,price:p,cls:c}); save(); renderPortfolio(); } }
+        function renderPortfolio() { let t=0, h=''; portfolio.forEach(a=>{ let v=a.qty*a.price; t+=v; h+=`<tr><td>${a.name}</td><td>${a.qty}</td><td>₺${a.price.toFixed(2)}</td><td>₺${v.toFixed(0)}</td><td><button onclick="delPortfolio(${a.id})" class="inline-btn btn-danger">🗑️</button></td>`; }); document.getElementById("portfolioBody").innerHTML=h; document.getElementById("portfolioTotal").innerText=fmt(t); updateChart(); }
+        function updateChart() { let cm=new Map(); portfolio.forEach(a=>{ cm.set(a.cls,(cm.get(a.cls)||0)+a.qty*a.price); }); if(chartInstance) chartInstance.destroy(); let ctx=document.getElementById("portfolioChart").getContext("2d"); chartInstance=new Chart(ctx,{type:'doughnut',data:{labels:[...cm.keys()],datasets:[{data:[...cm.values()],backgroundColor:['#4ade80','#fbbf24','#60a5fa','#f7931a']}]}}); document.getElementById("allocationPercent").innerHTML=[...cm].map(([c,v])=>`${c}: ${((v/getPortfolioTotal())*100).toFixed(1)}%`).join(' | '); }
+        function addPortfolioAsset() { let n=prompt("Varlık adı"), q=+prompt("Miktar"), p=+prompt("Fiyat"), c=prompt("Sınıf"); if(n&&q&&p&&c){ portfolio.push({id:Date.now(),name:n,qty:q,price:p,cls:c}); save(); renderPortfolio(); } }
         function delPortfolio(id) { portfolio=portfolio.filter(a=>a.id!==id); save(); renderPortfolio(); }
         function refreshPrices() { portfolio.forEach(a=>{ a.price=Math.max(1,a.price*(1+(Math.random()*.08-.03))); }); renderPortfolio(); }
         
-        // ============ CFO ============
+        // CFO
         function calculateCFO() { let p=+document.getElementById("cf_profit").value, r=+document.getElementById("cf_revenue").value; document.getElementById("cfoResult").innerHTML=`Kâr Marjı: %${((p/r)*100).toFixed(1)}`; }
         
-        // ============ MARKET ============
+        // MARKET
         function renderMarket() { document.getElementById("digitalMarketList").innerHTML=marketProducts.map(p=>`<div class="product-item"><span>${p.icon||'📦'} ${p.name}</span><span>${fmt(p.price)}</span><button onclick="addToCart('${p.name}',${p.price})" class="inline-btn">Sepet</button></div>`).join(''); }
         function addMarketProduct() { let n=document.getElementById("newMarketName").value, p=+document.getElementById("newMarketPrice").value, c=document.getElementById("newMarketCat").value; if(n){ marketProducts.push({id:Date.now(),name:n,price:p||0,cat:c,icon:'📦'}); save(); renderMarket(); } }
         function addToCart(n,p) { cart.push({n,p}); updateCartUI(); }
         function updateCartUI() { document.getElementById("cartCount").innerText=cart.length; document.getElementById("cartTotal").innerText=fmt(cart.reduce((s,i)=>s+i.p,0)); document.getElementById("cartItems").innerHTML=cart.map((i,idx)=>`<div>${i.n} - ${fmt(i.p)} <button onclick="cart.splice(${idx},1);updateCartUI();">❌</button></div>`).join('')||'Boş'; }
         function showCart() { document.getElementById("cartModal").classList.toggle("hidden"); }
         function closeCart() { document.getElementById("cartModal").classList.add("hidden"); }
-        function sendWhatsAppOrder() { if(!cart.length) return alert("Sepet boş!"); let m="Sipariş:%0A"+cart.map(i=>`- ${i.n}: ${fmt(i.p)}`).join('%0A'); window.open(`https://wa.me/905418660202?text=${encodeURIComponent(m)}`); }
+        function sendWhatsAppOrder() { if(!cart.length) return; let m="Sipariş:%0A"+cart.map(i=>`- ${i.n}: ${fmt(i.p)}`).join('%0A'); window.open(`https://wa.me/905418660202?text=${encodeURIComponent(m)}`); }
         
-        // ============ MENTAL & LİDERLİK ============
-        function analyzeMentalHealth() { let s=+document.getElementById("mental_stress").value; document.getElementById("mentalHealthOut").innerHTML=s>7?'⚠️ Stres yüksek, destek önerilir.':'✅ Mental durumunuz iyi.'; }
-        function analyzeLeadership() { document.getElementById("leadershipOut").innerHTML="🧭 Liderlik analizi tamamlandı. Kişisel gelişim raporu hazır."; }
+        // MENTAL
+        function updateMentalHealth() { document.getElementById("stressVal").innerText=document.getElementById("mental_stress").value; document.getElementById("sleepVal").innerText=document.getElementById("mental_sleep").value; document.getElementById("motivationVal").innerText=document.getElementById("mental_motivation").value; }
+        function analyzeMentalHealth() { let stress=+document.getElementById("mental_stress").value, sleep=+document.getElementById("mental_sleep").value; let score=((10-stress)+sleep)/2; document.getElementById("mentalHealthOut").innerHTML=`Mental Puan: ${score.toFixed(1)}/10 - ${score>7?"İyi":score>4?"Orta":"Destek gerekli"}`; }
+        function updateNutrition() { let cal=+document.getElementById("calorie_intake").value, goal=+document.getElementById("calorie_goal").value; document.getElementById("nutritionOut").innerHTML=`Kalori Farkı: ${(cal-goal)>0?`+${cal-goal} fazla`: `${cal-goal} eksik`} kcal`; }
+        function updateHealthMetrics() { let w=+document.getElementById("current_weight").value, h=+document.getElementById("height").value; let bmi=w/((h/100)**2); document.getElementById("healthMetricsOut").innerHTML=`BMI: ${bmi.toFixed(1)} - ${bmi<25?"Normal":bmi<30?"Kilolu":"Obez"}`; document.getElementById("energyShow").innerText=document.getElementById("energy").value; }
+        function generateWellnessReport() { document.getElementById("wellnessReport").innerHTML="🌟 Sağlık raporu oluşturuldu. Düzenli takip edin!"; }
         
-        // ============ YAŞAM ÇARKI ============
-        function renderWheel() {
-            let areas=["Kariyer","Finans","Sağlık","Aile","Gelişim","Sosyal"];
-            let h='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">';
-            areas.forEach((a,i)=>{ h+=`<div><label>${a}</label><input type="range" id="wheel_${i}" min="1" max="10" value="5" oninput="document.getElementById('wheelVal_${i}').innerText=this.value"><span id="wheelVal_${i}">5</span></div>`; });
-            h+='</div>';
-            document.getElementById("wheelContainer").innerHTML=h;
-        }
-        function analyzeLifeWheel() { let s=0; for(let i=0;i<6;i++) s+=+(document.getElementById(`wheel_${i}`)?.value||5); document.getElementById("lifeWheelOut").innerHTML=`Ortalama Puan: ${(s/6).toFixed(1)}/10`; }
-        
-        // ============ DOĞAL ÜRÜNLER ============
+        // LİDERLİK
+        function analyzeLeadership() { document.getElementById("leadershipOut").innerHTML="Liderlik analizi tamamlandı."; }
+        // YAŞAM
+        function renderWheel() { let areas=["Kariyer","Finans","Sağlık","Aile","Gelişim","Sosyal"]; let h='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'; areas.forEach((a,i)=>{ h+=`<div><label>${a}</label><input type="range" id="wheel_${i}" min="1" max="10" value="5" oninput="document.getElementById('wheelVal_${i}').innerText=this.value"><span id="wheelVal_${i}">5</span></div>`; }); h+='</div>'; document.getElementById("wheelContainer").innerHTML=h; }
+        function analyzeLifeWheel() { let s=0; for(let i=0;i<6;i++) s+=+(document.getElementById(`wheel_${i}`)?.value||5); document.getElementById("lifeWheelOut").innerHTML=`Ortalama: ${(s/6).toFixed(1)}/10`; }
+        // DOĞAL
         function renderNatural() { document.getElementById("naturalProductsList").innerHTML=naturalProducts.map(p=>`<div class="product-item"><span>${p.icon} ${p.name}</span><span>${fmt(p.price)}</span><button onclick="addToCart('${p.name}',${p.price})" class="inline-btn">Sepet</button></div>`).join(''); }
         
-        // ============ ADMIN ============
-        function accessAdmin() { if(document.getElementById("adminPass").value==="admin2026"){ document.getElementById("adminPanel").classList.remove("hidden"); renderAdminMarket(); renderAdminPortfolio(); } else alert("Şifre: admin2026"); }
-        function renderAdminMarket() { document.getElementById("adminMarketList").innerHTML=marketProducts.map(p=>`<div class="flex-between"><span>${p.name} - ${fmt(p.price)}</span><button onclick="adminDeleteMarket(${p.id})" class="inline-btn btn-danger">🗑️</button></div>`).join(''); }
-        function renderAdminPortfolio() { document.getElementById("adminPortfolioList").innerHTML=portfolio.map(a=>`<div class="flex-between"><span>${a.name}</span><button onclick="adminDeletePortfolio(${a.id})" class="inline-btn btn-danger">🗑️</button></div>`).join(''); }
-        function adminAddMarket() { let n=document.getElementById("adminMarketName").value, p=+document.getElementById("adminMarketPrice").value, c=document.getElementById("adminMarketCat").value; if(n){ marketProducts.push({id:Date.now(),name:n,price:p||0,cat:c,icon:'📦'}); save(); renderMarket(); renderAdminMarket(); } }
-        function adminDeleteMarket(id) { marketProducts=marketProducts.filter(p=>p.id!==id); save(); renderMarket(); renderAdminMarket(); }
-        function adminAddPortfolio() { let n=document.getElementById("adminAssetName").value, q=+document.getElementById("adminAssetQty").value, p=+document.getElementById("adminAssetPrice").value, c=document.getElementById("adminAssetClass").value; if(n&&q&&p&&c){ portfolio.push({id:Date.now(),name:n,qty:q,price:p,cls:c}); save(); renderPortfolio(); renderAdminPortfolio(); } }
-        function adminDeletePortfolio(id) { portfolio=portfolio.filter(a=>a.id!==id); save(); renderPortfolio(); renderAdminPortfolio(); }
-        function clearAllData() { if(confirm("Tüm veriler silinsin mi?")){ localStorage.clear(); location.reload(); } }
-        
-        // ============ INIT ============
-        function init() {
-            if(geminiApiKey) document.getElementById("geminiApiKeyInput").value = geminiApiKey;
-            renderPortfolio(); renderMarket(); renderNatural(); renderWheel(); renderEbookChapters();
-            updateFinancialHealth();
-            showPage('profile');
+        // 90 GÜNLÜK FIRE DASHBOARD
+        function updateFire90Dashboard() {
+            let totalIncome = fireData.activeIncome + fireData.passiveIncome + fireData.extraIncome;
+            let totalExpense = fireData.fixedExpense + fireData.variableExpense + fireData.wasteExpense;
+            let netWorth = fireData.savings + fireData.investments - fireData.debt;
+            let savingsRate = totalIncome>0 ? ((totalIncome-totalExpense)/totalIncome*100) : 0;
+            let fireTarget = totalExpense*12*25;
+            let fireGap = Math.max(0, fireTarget - netWorth);
+            document.getElementById("totalIncomeDisplay").innerHTML=`Toplam Gelir: ${fmt(totalIncome)}`;
+            document.getElementById("totalExpenseDisplay").innerHTML=`Toplam Gider: ${fmt(totalExpense)} | Kesilebilir: ${fmt(fireData.wasteExpense)}`;
+            document.getElementById("netWorthFire").innerHTML=`Net Servet: ${fmt(netWorth)}`;
+            document.getElementById("fireGapDisplay").innerHTML=`🎯 FIRE Hedef: ${fmt(fireTarget)} | Gap: ${fmt(fireGap)}`;
+            document.getElementById("savingsRateDisplay").innerHTML=`%${savingsRate.toFixed(1)}`;
+            document.getElementById("savingsRateBar").style.width = `${Math.min(100,savingsRate)}%`;
+            document.getElementById("investmentCapacity").innerHTML = `Yatırım Kapasitesi: ${fmt(totalIncome-totalExpense)}/ay`;
+            document.getElementById("minLivingCost").innerHTML = `${fmt(fireData.fixedExpense + fireData.variableExpense*0.5)}/ay`;
+            document.getElementById("targetIncomePhase2").innerHTML = `${fmt((fireData.activeIncome+fireData.extraIncome)*1.5)} (+%50)`;
+            document.getElementById("passiveTargetPhase3").innerHTML = `${fmt(fireData.passiveIncome*1.8)} (+%80)`;
+            document.getElementById("dayCounter").innerHTML = `${currentDay}/90`;
+            document.getElementById("daysProgress").style.width = `${(currentDay/90)*100}%`;
         }
+        
+        function markDay() { if(currentDay<90){ currentDay++; localStorage.setItem("fire_day",currentDay); updateFire90Dashboard(); if(currentDay===30) alert("🎯 Faz 1 tamamlandı!"); if(currentDay===60) alert("🚀 Faz 2 tamamlandı!"); if(currentDay===90) alert("🏆 90 gün tamam! Büyük başarı!"); } }
+        function resetProgress() { if(confirm("Sıfırlansın mı?")){ currentDay=0; localStorage.setItem("fire_day",0); updateFire90Dashboard(); } }
+        function optimizeExpenses() { alert(`Gereksiz harcama: ${fmt(fireData.wasteExpense)}. Bunu keserek tasarrufunuzu artırabilirsiniz.`); }
+        
+        function runScenario(type) {
+            let totalIncome = fireData.activeIncome + fireData.passiveIncome + fireData.extraIncome;
+            let totalExpense = fireData.fixedExpense + fireData.variableExpense + fireData.wasteExpense;
+            let netWorth = fireData.savings + fireData.investments - fireData.debt;
+            let monthlySave = totalIncome - totalExpense;
+            let multiplier = type==='conservative'?0.6 : (type==='base'?1 : 1.5);
+            let finalNet = netWorth + monthlySave*3*multiplier;
+            let newIncome = totalIncome * (type==='conservative'?1.05 : (type==='base'?1.15 : 1.35));
+            let newExpense = totalExpense * (type==='conservative'?0.95 : (type==='base'?0.9 : 0.8));
+            let newSaveRate = ((newIncome-newExpense)/newIncome)*100;
+            document.getElementById("scenarioBody").innerHTML = `<tr><td class="badge-conservative">Conservative</td><td>${fmt(finalNet*0.9)}</td><td>%${(newSaveRate*0.8).toFixed(0)}</td><td>${fmt((newIncome-newExpense))}/ay</td></tr>
+            <tr><td class="badge-base">Base Case</td><td>${fmt(finalNet)}</td><td>%${newSaveRate.toFixed(0)}</td><td>${fmt(newIncome-newExpense)}/ay</td></tr>
+            <tr><td class="badge-aggressive">Aggressive</td><td>${fmt(finalNet*1.2)}</td><td>%${Math.min(85,newSaveRate*1.2).toFixed(0)}</td><td>${fmt((newIncome-newExpense)*1.3)}/ay</td></tr>`;
+        }
+        
+        function saveChecklist() { let c=[document.getElementById("ch1")?.checked, document.getElementById("ch2")?.checked, document.getElementById("ch3")?.checked, document.getElementById("ch4")?.checked].filter(Boolean).length; document.getElementById("checklistStatus").innerHTML=`Bugün ${c}/4 tamamlandı`; }
+        function generateWeeklyReport() { document.getElementById("weeklyReport").innerHTML=`📊 Haftalık Rapor: Net servet ${fmt(fireData.savings+fireData.investments-fireData.debt)} | Hedefe devam!`; }
+        
+        function loadFireData() { let els=["activeIncome","passiveIncome","extraIncome","fixedExpense","variableExpense","wasteExpense","savings","investments","debtFire"]; els.forEach(id=>{ let el=document.getElementById(id); if(el) fireData[id]=parseFloat(el.value)||fireData[id]; }); updateFire90Dashboard(); }
+        document.querySelectorAll("#activeIncome,#passiveIncome,#extraIncome,#fixedExpense,#variableExpense,#wasteExpense,#savings,#investments,#debtFire").forEach(el=>{ if(el) el.addEventListener("change",()=>{ fireData[el.id]=parseFloat(el.value)||0; updateFire90Dashboard(); }); });
+        
+        // ADMIN
+        function accessAdmin() { if(document.getElementById("adminPass").value==="admin2026"){ document.getElementById("adminPanel").classList.remove("hidden"); document.getElementById("adminMarketList").innerHTML=marketProducts.map(p=>`<div>${p.name} - ${fmt(p.price)} <button onclick="marketProducts=marketProducts.filter(m=>m.id!==${p.id});save();renderMarket();accessAdmin();">❌</button></div>`).join(''); document.getElementById("adminPortfolioList").innerHTML=portfolio.map(a=>`<div>${a.name} <button onclick="portfolio=portfolio.filter(p=>p.id!==${a.id});save();renderPortfolio();accessAdmin();">❌</button></div>`).join(''); } else alert("Şifre: admin2026"); }
+        function clearAllData() { if(confirm("Tüm veriler silinecek!")){ localStorage.clear(); location.reload(); } }
+        
+        // INIT
+        function init() { if(geminiApiKey) document.getElementById("geminiApiKeyInput").value=geminiApiKey; renderPortfolio(); renderMarket(); renderNatural(); renderWheel(); renderEbookChapters(); updateFinancialHealth(); showPage('profile'); updateFire90Dashboard(); loadFireData(); setInterval(()=>{ if(document.getElementById("page-fire90") && !document.getElementById("page-fire90").classList.contains("hidden")) loadFireData(); },2000); }
         init();
     </script>
 </body>
